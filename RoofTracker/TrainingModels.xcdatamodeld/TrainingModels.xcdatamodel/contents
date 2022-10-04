@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="18154" systemVersion="20G314" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Address" representedClassName="Address" syncable="YES" codeGenerationType="class">
+        <attribute name="city" optional="YES" attributeType="String"/>
+        <attribute name="state" optional="YES" attributeType="String"/>
+        <attribute name="street" optional="YES" attributeType="String"/>
+        <relationship name="employee" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Employee" inverseName="address" inverseEntity="Employee"/>
+    </entity>
+    <entity name="Employee" representedClassName="Employee" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
+        <relationship name="address" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Address" inverseName="employee" inverseEntity="Address"/>
+        <relationship name="employeeInformation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EmployeeInformation" inverseName="employee" inverseEntity="EmployeeInformation"/>
+        <relationship name="file" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="File" inverseName="employees" inverseEntity="File"/>
+    </entity>
+    <entity name="EmployeeInformation" representedClassName="EmployeeInformation" syncable="YES" codeGenerationType="class">
+        <attribute name="birthday" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="birthPlace" optional="YES" attributeType="String"/>
+        <attribute name="socialSecurityNumber" optional="YES" attributeType="String"/>
+        <attribute name="taxId" optional="YES" attributeType="String"/>
+        <relationship name="employee" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Employee" inverseName="employeeInformation" inverseEntity="Employee"/>
+    </entity>
+    <entity name="File" representedClassName="File" syncable="YES" codeGenerationType="class">
+        <attribute name="acvItemTotal" optional="YES" attributeType="String"/>
+        <attribute name="cashItemTotal" optional="YES" attributeType="String"/>
+        <attribute name="coc" optional="YES" attributeType="String"/>
+        <attribute name="cocSwitch" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="deductible" optional="YES" attributeType="String"/>
+        <attribute name="founded" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="imageData" optional="YES" attributeType="Binary"/>
+        <attribute name="insCheckACVTotal" optional="YES" attributeType="String"/>
+        <attribute name="insCheckTotal" optional="YES" attributeType="String"/>
+        <attribute name="invoice" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="pymtCheckTotal" optional="YES" attributeType="String"/>
+        <attribute name="rcvItemTotal" optional="YES" attributeType="String"/>
+        <attribute name="timeStamp" optional="YES" attributeType="String"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
+        <relationship name="employees" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Employee" inverseName="file" inverseEntity="Employee"/>
+        <relationship name="fileItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FileItem" inverseName="file" inverseEntity="FileItem"/>
+        <relationship name="lineItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="LineItem" inverseName="file" inverseEntity="LineItem"/>
+    </entity>
+    <entity name="FileItem" representedClassName="FileItem" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="timeStamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
+        <relationship name="file" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="File" inverseName="fileItems" inverseEntity="File"/>
+        <relationship name="itemInformation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ItemInformation" inverseName="fileItem" inverseEntity="ItemInformation"/>
+    </entity>
+    <entity name="ItemInformation" representedClassName="ItemInformation" syncable="YES" codeGenerationType="class">
+        <attribute name="checkAmount" optional="YES" attributeType="String"/>
+        <attribute name="checkDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="insCheckCounter" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="lineNote" optional="YES" attributeType="String"/>
+        <attribute name="lineNumber" optional="YES" attributeType="String"/>
+        <attribute name="linePrice" optional="YES" attributeType="String"/>
+        <relationship name="fileItem" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FileItem" inverseName="itemInformation" inverseEntity="FileItem"/>
+    </entity>
+    <entity name="LineItem" representedClassName="LineItem" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="price" optional="YES" attributeType="String"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
+        <relationship name="file" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="File" inverseName="lineItems" inverseEntity="File"/>
+    </entity>
+    <elements>
+        <element name="Address" positionX="-142.4058837890625" positionY="-19.10517883300781" width="128" height="103"/>
+        <element name="Employee" positionX="209.8507080078125" positionY="-20.2938232421875" width="128" height="104"/>
+        <element name="EmployeeInformation" positionX="-86.06396484375" positionY="157.3154602050781" width="128" height="118"/>
+        <element name="File" positionX="160" positionY="192" width="128" height="313"/>
+        <element name="FileItem" positionX="74.2327880859375" positionY="308.5587768554688" width="128" height="104"/>
+        <element name="ItemInformation" positionX="117" positionY="198" width="128" height="134"/>
+        <element name="LineItem" positionX="701.1619873046875" positionY="37.46701049804688" width="128" height="103"/>
+    </elements>
+</model>
