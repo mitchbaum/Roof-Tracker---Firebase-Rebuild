@@ -13,7 +13,8 @@
 Created using Swift, UIKit, Google Cloud - Firebase
 
 # Features
-### All users
+### All Users
+- User authentication
 - Add files containing insurance checks, personal checks, and work to do 
 - Modify account details from the settings page
 - Modify files when paperwork changes throughout the roof build
