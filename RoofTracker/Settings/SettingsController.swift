@@ -161,7 +161,7 @@ class SettingsController: UIViewController, editProfileControllerDelegate, UIPic
     }
     
     @objc func handleSignOut(sender: UIButton) {
-        print("org signing out")
+        print("org signing out test commit")
         Utilities.animateView(sender)
         let signOutAction = UIAlertAction(title: "Sign Out", style: .destructive) { (action) in
             do {
