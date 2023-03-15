@@ -19,7 +19,7 @@ class SettingsController: UIViewController, editProfileControllerDelegate, UIPic
     
     var userEmail = ""
     
-    let years = ["2022", "2021", "2020"]
+    let years = ["2022", "2023", "2020"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
