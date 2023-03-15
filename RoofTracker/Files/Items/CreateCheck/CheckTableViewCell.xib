@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CheckTableViewCell" rowHeight="94" id="KGk-i7-Jjw" customClass="CheckTableViewCell" customModule="RoofTracker" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="438" height="94"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="438" height="94"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dollarsign.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="G2F-pU-MNw">
+                        <rect key="frame" x="10" y="5.5" width="55" height="54"/>
+                        <color key="tintColor" red="0.11372549019607843" green="0.15294117647058825" blue="0.19215686274509802" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="55" id="Cxs-Eu-RwA"/>
+                            <constraint firstAttribute="height" constant="55" id="V4l-W6-txQ"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Check Number:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5He-hh-9DT">
+                        <rect key="frame" x="75" y="10" width="107" height="18"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Une-V4-Lzv">
+                        <rect key="frame" x="216" y="10" width="212" height="18"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="212" id="BFK-Q4-Zlq"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                        <color key="textColor" red="0.11372549019607843" green="0.15294117647058825" blue="0.19215686274509802" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XCr-DX-EAh">
+                        <rect key="frame" x="216" y="38" width="212" height="18"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="212" id="fPq-LB-6Ws"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                        <color key="textColor" red="0.11372549019607843" green="0.15294117647058825" blue="0.19215686274509802" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Check Amount:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u8w-sy-UAn">
+                        <rect key="frame" x="75" y="38" width="105.5" height="18"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Check Date:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JyD-jM-VA7">
+                        <rect key="frame" x="75" y="66" width="84" height="18"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bXd-zw-B8y">
+                        <rect key="frame" x="216" y="66" width="212" height="18"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="212" id="XzO-V9-gJh"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                        <color key="textColor" red="0.11372549019607843" green="0.15294117647058825" blue="0.19215686274509802" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PAID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MfY-wM-yjR" userLabel="Paid Label">
+                        <rect key="frame" x="16" y="63" width="42" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="42" id="2eA-53-Ff2"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                <constraints>
+                    <constraint firstItem="G2F-pU-MNw" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="2TA-SX-FIr"/>
+                    <constraint firstAttribute="bottom" secondItem="JyD-jM-VA7" secondAttribute="bottom" constant="10" id="3em-gk-RRs"/>
+                    <constraint firstItem="MfY-wM-yjR" firstAttribute="top" secondItem="G2F-pU-MNw" secondAttribute="bottom" constant="3" id="835-uY-DZ7"/>
+                    <constraint firstAttribute="trailing" secondItem="bXd-zw-B8y" secondAttribute="trailing" constant="10" id="DXT-JS-AjH"/>
+                    <constraint firstItem="MfY-wM-yjR" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="HPV-gI-vGe"/>
+                    <constraint firstItem="JyD-jM-VA7" firstAttribute="top" secondItem="u8w-sy-UAn" secondAttribute="bottom" constant="10" id="Hs7-Ts-f3M"/>
+                    <constraint firstAttribute="trailing" secondItem="XCr-DX-EAh" secondAttribute="trailing" constant="10" id="LnO-nV-2ej"/>
+                    <constraint firstItem="G2F-pU-MNw" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="PiY-mC-ae9"/>
+                    <constraint firstAttribute="bottom" secondItem="bXd-zw-B8y" secondAttribute="bottom" constant="10" id="Q9y-2W-EAq"/>
+                    <constraint firstItem="5He-hh-9DT" firstAttribute="leading" secondItem="G2F-pU-MNw" secondAttribute="trailing" constant="10" id="YC6-1e-tIx"/>
+                    <constraint firstItem="u8w-sy-UAn" firstAttribute="leading" secondItem="G2F-pU-MNw" secondAttribute="trailing" constant="10" id="ZC1-GH-qKy"/>
+                    <constraint firstAttribute="bottom" secondItem="MfY-wM-yjR" secondAttribute="bottom" constant="10" id="cDz-mF-FPf"/>
+                    <constraint firstItem="5He-hh-9DT" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="dbT-NZ-fqS"/>
+                    <constraint firstAttribute="trailing" secondItem="Une-V4-Lzv" secondAttribute="trailing" constant="10" id="fIo-mj-EH5"/>
+                    <constraint firstItem="bXd-zw-B8y" firstAttribute="top" secondItem="XCr-DX-EAh" secondAttribute="bottom" constant="10" id="hgI-fa-d4b"/>
+                    <constraint firstItem="XCr-DX-EAh" firstAttribute="top" secondItem="Une-V4-Lzv" secondAttribute="bottom" constant="10" id="pJL-Hj-bHv"/>
+                    <constraint firstItem="JyD-jM-VA7" firstAttribute="leading" secondItem="MfY-wM-yjR" secondAttribute="trailing" constant="17" id="u1T-uP-XDz"/>
+                    <constraint firstItem="u8w-sy-UAn" firstAttribute="top" secondItem="5He-hh-9DT" secondAttribute="bottom" constant="10" id="uDE-RC-zn8"/>
+                    <constraint firstItem="Une-V4-Lzv" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="xf0-wx-wTl"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <color key="backgroundColor" red="0.94893664119999999" green="0.94907277820000002" blue="0.94890683890000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <connections>
+                <outlet property="myCheckAmountLabel" destination="XCr-DX-EAh" id="0ja-MV-Kbi"/>
+                <outlet property="myCheckDateLabel" destination="bXd-zw-B8y" id="Mn2-az-0YQ"/>
+                <outlet property="myCheckNumberLabel" destination="Une-V4-Lzv" id="qWW-33-nVq"/>
+                <outlet property="myPaidLabel" destination="MfY-wM-yjR" id="jpN-Md-Yy7"/>
+            </connections>
+            <point key="canvasLocation" x="-63.768115942028992" y="89.732142857142847"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="dollarsign.circle" catalog="system" width="128" height="121"/>
+    </resources>
+</document>
