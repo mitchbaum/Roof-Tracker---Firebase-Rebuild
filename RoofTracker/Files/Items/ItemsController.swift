@@ -27,6 +27,8 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
     var FB_allItems = [FB_ItemInformation]()
     var tableViewItems = [[FB_ItemInformation]]()
     
+    var hasCredit = false
+    
     // this function controls what the employee view controller looks like when user taps on it
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -71,6 +73,7 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
         
         // get the note first before UI is built and before table rows are built.
         noteLabelInfo.text = file?.note
+        
         setupUI()
         
         // create new custom cell for insurance check table view
@@ -180,7 +183,9 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
         if let coc = Double(file?.coc ?? ""), let invoice = Double(file?.invoice ?? ""), let deductible = Double(file?.deductible ?? "") {
             let cocMessage = currencyFormatter.string(from: NSNumber(value: coc))
             cocTotalLabelInfo.text = cocMessage
-            let invoiceMessage = currencyFormatter.string(from: NSNumber(value: invoice))
+            let credit = Double(file?.creditItemTotal ?? "")
+            let invoiceMinusCredit = invoice - (credit ?? 0.0)
+            let invoiceMessage = currencyFormatter.string(from: NSNumber(value: invoiceMinusCredit))
             invoiceTotalLabelInfo.text = invoiceMessage
             let deductibleMessage = currencyFormatter.string(from: NSNumber(value: deductible))
             deductibleTotalLabelInfo.text = deductibleMessage
@@ -272,6 +277,23 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
             
         }
         
+        creditLabelInfo.text = ""
+        // if there has been an entered item, but deleted this will handle the making the label empty
+        if file?.creditItemTotal == "0.0" || file?.creditItemTotal == "0"{
+            creditLabelInfo.text = ""
+            creditLabel.textColor = UIColor.white
+            invoiceTotalLabel.text = "Invoice Total"
+        } else if file?.creditItemTotal != "" {
+            let credit = Double(file?.creditItemTotal ?? "")
+            let creditMessage = currencyFormatter.string(from: NSNumber(value: credit ?? 0.0))
+            creditLabelInfo.text = creditMessage
+            creditLabelInfo.textColor = UIColor.lightRed
+            creditLabel.textColor = UIColor.lightRed
+            invoiceTotalLabel.text = "Invoice Total (Invoice - Credit)"
+        }
+        print("hasCredit: ", hasCredit)
+        
+        
         noteLabelInfo.text = file?.note
         
     }
@@ -316,6 +338,7 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
         var cashItemTotal = 0.0
         var pymtCheckTotal = 0.0
         var RCVItemTotal = 0.0
+        var CreditItemTotal = 0.0
         for item in FB_allItems {
             if item.type! == "Insurance" || item.type! == "Insurance PAID" {
                 let checkAmount = Double(item.checkAmount ?? "")
@@ -335,6 +358,10 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
                 let itemAmount = Double(item.linePrice ?? "")
                 RCVItemTotal += itemAmount ?? 0.0
 
+            } else if item.type! == "Credit" {
+                let itemAmount = Double(item.linePrice ?? "")
+                CreditItemTotal += itemAmount ?? 0.0
+
             }
             if item.type! == "Personal" || item.type! == "Insurance PAID"{
                 let checkAmount = Double(item.checkAmount ?? "")
@@ -345,13 +372,11 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
         file?.insCheckTotal = String(insCheckTotal)
         file?.acvItemTotal = String(ACVItemTotal)
         file?.insCheckACVTotal = String(ACVItemTotal - insCheckTotal)
-        //print("Insurance checks + ACV = $", file?.insCheckACVTotal ?? 0.0)
         file?.cashItemTotal = String(cashItemTotal)
-        //print(cashItemTotal)
         file?.pymtCheckTotal = String(pymtCheckTotal)
-        //print(pymtCheckTotal)
         file?.rcvItemTotal = String(RCVItemTotal)
-        // persist the change in firebase
+        file?.creditItemTotal = String(CreditItemTotal)
+
         guard let uid = Auth.auth().currentUser?.uid else { return }
         self.db.collection("Users").document(uid).collection("Files").document((file?.id)!).setData([
                                                                 "insCheckTotal" : String(insCheckTotal),
@@ -359,7 +384,8 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
                                                                 "insCheckACVTotal" : String(ACVItemTotal - insCheckTotal),
                                                                 "cashItemTotal" : String(cashItemTotal),
                                                                 "pymtCheckTotal" : String(pymtCheckTotal),
-                                                                "rcvItemTotal" : String(RCVItemTotal)
+                                                                "rcvItemTotal" : String(RCVItemTotal),
+                                                                "creditItemTotal" : String (CreditItemTotal)
         ], merge: true)
         
         getSummaryValues()
@@ -395,7 +421,7 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
             return item.type == "Cash work to do"
         }
         // filter staff for "Executives"
-        var credit = FB_allItems.filter { (item) -> Bool in
+        let credit = FB_allItems.filter { (item) -> Bool in
             return item.type == "Credit"
         }
         // sort the rows in each section by time added to itemsController
@@ -607,6 +633,28 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
         return label
     }()
     
+    let creditLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Credit"
+        // label.backgroundColor = .red
+        // enable autolayout
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        label.textColor = .white
+        return label
+    }()
+
+    let creditLabelInfo: UILabel = {
+        let label = UILabel()
+        label.text = ""
+        // label.backgroundColor = .red
+        // enable autolayout
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont(name:"HelveticaNeue-Bold", size: 16)
+        label.textColor = .white
+        return label
+    }()
+    
     let line: UILabel = {
         let line = UILabel()
         line.backgroundColor = .lightRed
@@ -770,10 +818,19 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
         outOfPocketLabelInfo.bottomAnchor.constraint(equalTo: outOfPocketLabel.bottomAnchor).isActive = true
         outOfPocketLabelInfo.topAnchor.constraint(equalTo: outOfPocketLabel.topAnchor).isActive = true
 
+        containerView.addSubview(creditLabel)
+        creditLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 16).isActive = true
+        creditLabel.topAnchor.constraint(equalTo: outOfPocketLabel.bottomAnchor).isActive = true
+        creditLabel.heightAnchor.constraint(equalToConstant: 35).isActive = true
+
+        containerView.addSubview(creditLabelInfo)
+        creditLabelInfo.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -16).isActive = true
+        creditLabelInfo.bottomAnchor.constraint(equalTo: creditLabel.bottomAnchor).isActive = true
+        creditLabelInfo.topAnchor.constraint(equalTo: creditLabel.topAnchor).isActive = true
 
         containerView.addSubview(line)
         line.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -16).isActive = true
-        line.topAnchor.constraint(equalTo: outOfPocketLabel.bottomAnchor, constant: 10).isActive = true
+        line.topAnchor.constraint(equalTo: creditLabel.bottomAnchor, constant: 10).isActive = true
         line.heightAnchor.constraint(equalToConstant: 1).isActive = true
         line.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 16).isActive = true
 
