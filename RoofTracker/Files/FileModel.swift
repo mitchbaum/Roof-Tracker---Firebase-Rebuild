@@ -25,7 +25,9 @@ struct FB_File: Equatable {
     var insCheckTotal: String?
     var pymtCheckTotal: String?
     var rcvItemTotal: String?
-    var creditItemTotal: String?
     var note: String?
+    var creditItemTotal: String?
+    var missingFunds: Double?
+    var missingFundsSwitch: Bool?
     
 }

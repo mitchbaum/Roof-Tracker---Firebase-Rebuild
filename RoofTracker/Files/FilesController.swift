@@ -216,15 +216,17 @@ class FilesController: UITableViewController, UISearchBarDelegate, UISearchResul
                     let type = data["type"] as? String ?? ""
                     let id = data["id"] as? String ?? ""
                     let insCheckACVTotal = data["insCheckACVTotal"] as? String ?? ""
-                    let acvTiemTotal = data["acvTiemTotal"] as? String ?? ""
+                    let acvItemTotal = data["acvItemTotal"] as? String ?? ""
                     let cashItemTotal = data["cashItemTotal"] as? String ?? ""
                     let insCheckTotal = data["insCheckTotal"] as? String ?? ""
                     let pymtCheckTotal = data["pymtCheckTotal"] as? String ?? ""
                     let rcvItemTotal = data["rcvItemTotal"] as? String ?? ""
                     let note = data["note"] as? String ?? ""
-
+                    let creditItemTotal = data["creditItemTotal"] as? String ?? ""
+                    let missingFunds = data["missingFunds"] as? Double ?? nil
+                    let missingFundsSwitch = data["missingFundsSwitch"] as? Bool ?? false
                      
-                    let newFile = FB_File(name: name, coc: coc, deductible: deductible, cocSwitch: cocSwitch, imageData: imageData, invoice: invoice, timeStamp: timeStamp, modified: modified, type: type, insCheckACVTotal: insCheckACVTotal, id: id, acvItemTotal: acvTiemTotal, cashItemTotal: cashItemTotal, insCheckTotal: insCheckTotal, pymtCheckTotal: pymtCheckTotal, rcvItemTotal: rcvItemTotal, note: note)
+                    let newFile = FB_File(name: name, coc: coc, deductible: deductible, cocSwitch: cocSwitch, imageData: imageData, invoice: invoice, timeStamp: timeStamp, modified: modified, type: type, insCheckACVTotal: insCheckACVTotal, id: id, acvItemTotal: acvItemTotal, cashItemTotal: cashItemTotal, insCheckTotal: insCheckTotal, pymtCheckTotal: pymtCheckTotal, rcvItemTotal: rcvItemTotal, note: note, creditItemTotal: creditItemTotal, missingFunds: missingFunds, missingFundsSwitch: missingFundsSwitch)
                     self.files.append(newFile)
                     
 

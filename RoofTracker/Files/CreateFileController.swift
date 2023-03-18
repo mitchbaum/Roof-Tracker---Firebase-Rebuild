@@ -30,6 +30,7 @@ class CreateFileController: UIViewController, UIImagePickerControllerDelegate, U
     var filesCollectionRef: CollectionReference!
     
     var thisFileId = ""
+    var isMissingFunds = false
     
     // variable keeps track of which file you are trying to edit. variable file with type File
     var file: FB_File? {
@@ -84,6 +85,13 @@ class CreateFileController: UIViewController, UIImagePickerControllerDelegate, U
             } else {
                 finalCOCSwitch.isOn = false
             }
+            print("file?.missingFundsSwitch: ", file?.missingFundsSwitch)
+            
+            if file?.missingFundsSwitch == true {
+                missingFundsSwitch.isOn = true
+            } else {
+                missingFundsSwitch.isOn = false
+            }
 //            // this fixes the crash if you tap edit on a cell without a date
 //            guard let founded = file?.founded else { return }
 //            datePicker.date = (file?.founded)!
@@ -120,9 +128,7 @@ class CreateFileController: UIViewController, UIImagePickerControllerDelegate, U
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // ternary syntax. Basically a shortened if else statement that checks to see if file is nil or if it is already avalible which would determine the title
         navigationItem.title = file == nil ? "Create File" : "Edit File"
-        
     }
     
     override func viewDidLoad() {
@@ -156,17 +162,13 @@ class CreateFileController: UIViewController, UIImagePickerControllerDelegate, U
     
     // save function
     @objc private func handleSave() {
-        // this means im creating a file
         if file == nil {
-            //createFile()
             FB_createFile()
         } else {
-            //saveFileChanges()
             FB_saveFileChanges()
         }
     }
-    // save file edits when i tap the "save" button on edit file modal
-    
+
     private func FB_saveFileChanges() {
         self.hud.textLabel.text = "Saving File"
         self.hud.show(in: self.view, animated: true)
@@ -219,6 +221,22 @@ class CreateFileController: UIViewController, UIImagePickerControllerDelegate, U
             self.db.collection("Users").document(uid).collection("Files").document(self.thisFileId).updateData(["deductible" : deductible ?? ""])
         }
         
+        if missingFundsSwitch.isOn != file?.missingFundsSwitch {
+            self.db.collection("Users").document(uid).collection("Files").document(self.thisFileId).updateData(["missingFundsSwitch" : missingFundsSwitch.isOn])
+            print("setting missingFundsSwitch to \(String(missingFundsSwitch.isOn)) in db")
+            if (missingFundsSwitch.isOn && file?.missingFunds == nil) {
+                print("saving missing funds")
+                if let coc = Double(file?.coc ?? ""), let insCheckACVTotal = Double(file?.insCheckACVTotal ?? ""), let deducible = Double(file?.deductible ?? "") {
+                    let missingFunds = coc + insCheckACVTotal - deducible
+                  self.db.collection("Users").document(uid).collection("Files").document(self.thisFileId).updateData(["missingFunds" : missingFunds])
+                    updateUserTotalMissingFunds(missingFunds: missingFunds, fileId: self.thisFileId, fileName: file?.name ?? "")
+                }
+                
+            }
+        }
+        
+        
+        
         // reset time stamp
         let timeStamp = "\(DateFormatter.localizedString(from: Date(), dateStyle: .long, timeStyle: .long))"
         self.db.collection("Users").document(uid).collection("Files").document(self.thisFileId).updateData(["timeStamp" : timeStamp, "modified" : FieldValue.serverTimestamp()])
@@ -265,11 +283,53 @@ class CreateFileController: UIViewController, UIImagePickerControllerDelegate, U
             } else {
                 self.hud.dismiss(animated: true)
                 self.dismiss(animated: true, completion: {self.delegate?.didEditFile(file: self.file!) })
-                
             }
         }
+    }
     
-
+    private func updateUserTotalMissingFunds(missingFunds: Double, fileId: String, fileName: String) {
+        var currentUserMissingFundsTotal = 0.0
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        db.collection("Users").document(uid).getDocument(completion: { snapshot, error in
+            if let err = error {
+                debugPrint("Error fetching profile: \(err)")
+            } else {
+                if let data = snapshot?.data() {
+                    let missingFundsTotal = data["missingFundsTotal"] as? Double ?? nil
+                    let companyId = data["companyId"] as? String
+                    
+                    if missingFundsTotal != nil {
+                        currentUserMissingFundsTotal = missingFundsTotal!
+                    }
+                    self.db.collection("Users").document(uid).updateData(["missingFundsTotal" : currentUserMissingFundsTotal + missingFunds])
+                    
+                    if companyId != "" {
+                        self.db.collection("Companies").document(companyId!).collection("MissingFundsLog").document().setData(["timeStamp" : FieldValue.serverTimestamp(), "fileId" :fileId, "fileName": fileName, "missingFunds" : missingFunds, "ownerId": uid])
+                        self.updateCompanyTotalMissingFunds(missingFunds: missingFunds, companyId: companyId!)
+                    }
+                }
+            }
+        })
+        
+    }
+    
+    private func updateCompanyTotalMissingFunds(missingFunds: Double, companyId: String) {
+        var currentCompanyMissingFundsTotal = 0.0
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        db.collection("Companies").document(companyId).getDocument(completion: { snapshot, error in
+            if let err = error {
+                debugPrint("Error fetching profile: \(err)")
+            } else {
+                if let data = snapshot?.data() {
+                    let missingFundsTotal = data["missingFundsTotal"] as? Double ?? nil
+                    
+                    if missingFundsTotal != nil {
+                        currentCompanyMissingFundsTotal = missingFundsTotal!
+                    }
+                    self.db.collection("Companies").document(companyId).updateData(["missingFundsTotal" : currentCompanyMissingFundsTotal + missingFunds])
+                }
+            }
+        })
         
     }
     
@@ -353,63 +413,40 @@ class CreateFileController: UIViewController, UIImagePickerControllerDelegate, U
         
     }
     
+    @objc func switchIsChanged(mySwitch: UISwitch) {
+        let value = mySwitch.isOn
+        if (!value) {
+            removeMissingFunds(title: "Verify Missing Funds", message: "Remove missing funds flag from file?")
+        } else if (value && (file?.deductible == "" || file?.coc == "")) {
+            showError(title: "Verify Missing Funds", message: "No missing funds detected. Could not calculate due to missing Deductible and COC.")
+            missingFundsSwitch.isOn = false
+        }else if (value) {
+            let currencyFormatter = NumberFormatter()
+            currencyFormatter.usesGroupingSeparator = true
+            currencyFormatter.numberStyle = .currency
+            currencyFormatter.locale = Locale.current
+            if let coc = Double(file?.coc ?? ""), let insCheckACVTotal = Double(file?.insCheckACVTotal ?? ""), let deducible = Double(file?.deductible ?? "") {
+                let missingFunds = coc + insCheckACVTotal - deducible
+                let currencyFormat = currencyFormatter.string(from: NSNumber(value: missingFunds )) ?? ""
+                confirmMissingFunds(title: "Verify Missing Funds", message: "Is this the correct amount missing that will be pursued to collect?\n\n Insurance Still Owes Homeowner:\n" + currencyFormat)
+            }
+        }
+        // Do something
+        print("switch value changed \(value)")
+    }
     
-//    private func createFile() {
-//        print("trying to save file")
-//
-//        // put data in context so it can be saved later on
-//        let context = CoreDataManager.shared.persistentContainer.viewContext
-//        let file = NSEntityDescription.insertNewObject(forEntityName: "File", into: context)
-//        let timeStamp = "\(DateFormatter.localizedString(from: Date(), dateStyle: .long, timeStyle: .long))"
-//        guard let fileType = fileTypeSegmentedControl.titleForSegment(at: fileTypeSegmentedControl.selectedSegmentIndex) else {
-//            return
-//        }
-//        let COCSwitch = finalCOCSwitch.isOn
-//        // set the value of what the user enters in name of file
-//        file.setValue(nameTextField.text, forKey: "name")
-//        file.setValue(cocTextField.text, forKey: "coc")
-//        file.setValue(invoiceTextField.text, forKey: "invoice")
-//        file.setValue(deductibleTextField.text, forKey: "deductible")
-//        file.setValue(timeStamp, forKey: "timeStamp")
-//        file.setValue(fileType, forKey: "type")
-//        file.setValue(COCSwitch, forKey: "cocSwitch")
-//
-//
-//        // set founded date
-////        file.setValue(datePicker.date, forKey: "founded")
-//        // set new image value in core data
-//        if let fileImage = fileImageView.image {
-//            let imageData = fileImage.jpegData(compressionQuality: 0.8)
-//            file.setValue(imageData, forKey: "imageData")
-//        }
-//
-//
-//        // perform the save
-//        do {
-//            try context.save()
-//
-//            // success
-//            dismiss(animated: true, completion: {
-//                //self.delegate?.didAddFile(file: file as! FB_File)
-//            })
-// 
-//        } catch let saveErr {
-//            print("Failed to save file:", saveErr)
-//        }
-//
-//        // dismiss modal with animation to insert the row
-////        dismiss(animated: true) {
-////            // use the name text field property to save it as the file name
-////            // get text out of textfield, any code that is right after guard statement, use this name variable instead
-////            // we need a self because we have closure {} to avoid retain cycle
-////            guard let name = self.nameTextField.text else { return }
-////            let file = file(name: name, founded: Date())
-////            // send new file to the filesController
-////            self.filesController?.addfile(file: file)
-////        }
-//
-//
-//    }
+    func confirmMissingFunds(_ action: UIAlertAction) {
+        isMissingFunds = true
+        missingFundsSwitch.isOn = true
+        print("confirmMissingFunds isMissingFunds: " +  String(isMissingFunds))
+    }
+    
+    func cancelMissingFunds(_ action: UIAlertAction) {
+        isMissingFunds = false
+        missingFundsSwitch.isOn = false
+        print("cancelMissingFunds isMissingFunds: " +  String(isMissingFunds))
+    }
+    
     
     // create image picker option profile picture
     // lazy var enables self to be something other than nil, so that handleSelectPhoto actually works
@@ -663,6 +700,27 @@ class CreateFileController: UIViewController, UIImagePickerControllerDelegate, U
         
     }()
     
+
+    let missingFundsLabel: UILabel = {
+        let label = UILabel()
+        label.text = "IN PURSUIT OF MISSING FUNDS"
+        label.font = UIFont.systemFont(ofSize: 13, weight: .medium)
+        label.textColor = .black
+        // enable autolayout
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        return label
+    }()
+
+    let missingFundsSwitch: UISwitch = {
+        let mySwitch = UISwitch()
+        mySwitch.onTintColor = UIColor.lightRed
+        mySwitch.translatesAutoresizingMaskIntoConstraints = false
+        mySwitch.addTarget(self, action: #selector(switchIsChanged(mySwitch:)), for: UIControl.Event.valueChanged)
+        return mySwitch
+        
+    }()
+    
     // check type segmented viewing filter
     let fileTypeSegmentedControl: UISegmentedControl = {
 
@@ -684,15 +742,6 @@ class CreateFileController: UIViewController, UIImagePickerControllerDelegate, U
         return sc
     }()
     
-//    // create date picker property
-//    let datePicker: UIDatePicker = {
-//        let dp = UIDatePicker()
-//        // change style of date picerk UI
-//        dp.datePickerMode = .date
-//        dp.translatesAutoresizingMaskIntoConstraints = false
-//
-//        return dp
-//    }()
     lazy var contentViewSize = CGSize(width: self.view.frame.width, height: self.view.frame.height +   165)
     // add scroll to view controller
     lazy var scrollView : UIScrollView = {
@@ -822,18 +871,26 @@ class CreateFileController: UIViewController, UIImagePickerControllerDelegate, U
         notesTextField.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -32).isActive = true
         notesTextField.topAnchor.constraint(equalTo: notesLabel.bottomAnchor, constant: 10).isActive = true
         notesTextField.heightAnchor.constraint(equalToConstant: 80).isActive = true
-
         
-        
-        // add Final COC label
         view.addSubview(finalCOCLabel)
         finalCOCLabel.topAnchor.constraint(equalTo: notesTextField.bottomAnchor, constant: 30).isActive = true
         finalCOCLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 32).isActive = true
-        
-        // add final COC switch
+
         view.addSubview(finalCOCSwitch)
         finalCOCSwitch.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -32).isActive = true
         finalCOCSwitch.centerYAnchor.constraint(equalTo: finalCOCLabel.centerYAnchor).isActive = true
+        
+        if file != nil {
+            view.addSubview(missingFundsLabel)
+            missingFundsLabel.topAnchor.constraint(equalTo: finalCOCLabel.bottomAnchor, constant: 30).isActive = true
+            missingFundsLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 32).isActive = true
+            
+            view.addSubview(missingFundsSwitch)
+            missingFundsSwitch.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -32).isActive = true
+            missingFundsSwitch.centerYAnchor.constraint(equalTo: missingFundsLabel.centerYAnchor).isActive = true
+        }
+
+
 
     }
     
@@ -849,6 +906,23 @@ class CreateFileController: UIViewController, UIImagePickerControllerDelegate, U
         present(alertController, animated: true, completion: nil)
         return
     }
+    
+    private func confirmMissingFunds(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Confirm", style: .cancel, handler: confirmMissingFunds))
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .default, handler: cancelMissingFunds))
+        present(alertController, animated: true, completion: nil)
+        return
+    }
+    
+    private func removeMissingFunds(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Confirm", style: .cancel, handler: cancelMissingFunds))
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .default, handler: confirmMissingFunds))
+        present(alertController, animated: true, completion: nil)
+        return
+    }
+    
     
     //Calls this function when the tap is recognized.
     @objc func dismissKeyboard() {

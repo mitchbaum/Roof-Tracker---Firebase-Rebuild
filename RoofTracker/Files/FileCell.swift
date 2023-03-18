@@ -76,10 +76,33 @@ class FileCell: UITableViewCell {
                     closedLabel.text = ""
                 }
             }
+
+            if let missingFunds =  file?.missingFundsSwitch {
+                if missingFunds == true {
+                    missingFundsLabel.layer.backgroundColor = UIColor.lightRed.cgColor
+                    missingFundsLabel.contentEdgeInsets = UIEdgeInsets(top: 3, left: 10, bottom: 3, right: 10)
+                    missingFundsLabel.setTitle("In Pursuit of Missing Funds", for: .normal)
+                    missingFundsLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
+                    
+                } else {
+                    missingFundsLabel.heightAnchor.constraint(equalToConstant: 0).isActive = true
+                }
+            }
             
 
         }
     }
+    
+    let alertView: UIView = {
+            let view = UIView()
+            view.backgroundColor = .lightBlue
+            view.layer.masksToBounds = true
+            view.layer.cornerRadius = 5
+            view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
+            //  [.layerMinXMaxYCorner, .layerMaxXMaxYCorner, .layerMinXMinYCorner, .layerMaxXMinYCorner]  [bottom left, bottom right, top left, top right]
+            view.translatesAutoresizingMaskIntoConstraints = false
+            return view
+        }()
     
     // ypu cannot declare another image view using "imageView"
     let fileImageView: UIImageView = {
@@ -103,7 +126,7 @@ class FileCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        //label.backgroundColor = .yellow
+        //label.backgroundColor = .cyan
         return label
     }()
     
@@ -114,7 +137,7 @@ class FileCell: UITableViewCell {
         label.font = UIFont.systemFont(ofSize: 20, weight: .regular)
         label.textColor = .lightRed
         label.translatesAutoresizingMaskIntoConstraints = false
-        //label.backgroundColor = .green
+        //label.backgroundColor = .yellow
         return label
     }()
     
@@ -125,7 +148,7 @@ class FileCell: UITableViewCell {
         label.textColor = .black
         // enable autolayout
         label.translatesAutoresizingMaskIntoConstraints = false
-        //label.backgroundColor = .red
+        //label.backgroundColor = .purple
         return label
     }()
     
@@ -137,8 +160,18 @@ class FileCell: UITableViewCell {
         label.font = UIFont.italicSystemFont(ofSize: 12)
         label.textColor = .darkGray
         label.translatesAutoresizingMaskIntoConstraints = false
-        //label.backgroundColor = .blue
+        //label.backgroundColor = .orange
         return label
+    }()
+    
+    let missingFundsLabel: UIButton = {
+        let button = UIButton()
+        button.layer.cornerRadius = 10
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 14, weight: .regular)
+        button.isUserInteractionEnabled = false
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
     
     // create custom label for closed label
@@ -170,6 +203,7 @@ class FileCell: UITableViewCell {
         cardView.leftAnchor.constraint(equalTo: leftAnchor, constant: 5).isActive = true
         cardView.rightAnchor.constraint(equalTo: rightAnchor, constant: -5).isActive = true
         cardView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2).isActive = true
+        
         // placement of the image in cell
         addSubview(fileImageView)
         fileImageView.heightAnchor.constraint(equalToConstant: 50).isActive = true
@@ -188,27 +222,28 @@ class FileCell: UITableViewCell {
         addSubview(messageLabel)
         messageLabel.leftAnchor.constraint(equalTo: fileImageView.rightAnchor, constant: 11).isActive = true
         messageLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 5).isActive = true
-        messageLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -26).isActive = true
+        //messageLabel.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         
         addSubview(postMessageLabel)
         postMessageLabel.leftAnchor.constraint(equalTo: messageLabel.rightAnchor, constant: 5).isActive = true
-        postMessageLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -28).isActive = true
-        
-        
-        // placement of timestamp label in cell
-        addSubview(timestampLabel)
-        timestampLabel.leftAnchor.constraint(equalTo: fileImageView.rightAnchor, constant: 11).isActive = true
-        timestampLabel.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 5).isActive = true
-        timestampLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8).isActive = true
-        
-        // placement of timestamp label in cell
-        addSubview(closedLabel)
-        closedLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -16).isActive = true
-        closedLabel.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 5).isActive = true
-        closedLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8).isActive = true
-        
-        //timestampLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -16).isActive = true
-        //timestampLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        postMessageLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 13).isActive = true
+        //postMessageLabel.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+
+            addSubview(missingFundsLabel)
+            missingFundsLabel.leftAnchor.constraint(equalTo: fileImageView.rightAnchor, constant: 11).isActive = true
+            missingFundsLabel.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 5).isActive = true
+            
+            addSubview(timestampLabel)
+            timestampLabel.leftAnchor.constraint(equalTo: fileImageView.rightAnchor, constant: 11).isActive = true
+            timestampLabel.topAnchor.constraint(equalTo: missingFundsLabel.bottomAnchor, constant: 5).isActive = true
+            timestampLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8).isActive = true
+            
+            // placement of timestamp label in cell
+            addSubview(closedLabel)
+            closedLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -16).isActive = true
+            closedLabel.topAnchor.constraint(equalTo: missingFundsLabel.bottomAnchor, constant: 5).isActive = true
+            closedLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8).isActive = true
+
     }
     
     required init?(coder aDecoder: NSCoder) {

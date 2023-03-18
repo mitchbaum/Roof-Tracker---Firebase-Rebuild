@@ -454,7 +454,18 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
     
     let itemCellId = "itemCellId"
 
-    
+    let missingFundsFlag: UIButton = {
+        let button = UIButton()
+        button.layer.borderColor = UIColor.lightRed.cgColor
+        button.layer.borderWidth = 1
+        button.layer.cornerRadius = 10
+        button.contentEdgeInsets = UIEdgeInsets(top: 3, left: 10, bottom: 3, right: 10)
+        button.setTitle("Missing Funds", for: .normal)
+        button.setTitleColor(.lightRed, for: .normal)
+        button.isUserInteractionEnabled = false
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
     
     // create button to send summary to office
     let summaryButton: UIButton = {
@@ -732,6 +743,13 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
 
         self.view.addSubview(containerView)
 
+
+        if file?.missingFundsSwitch == true {
+            view.addSubview(missingFundsFlag)
+            missingFundsFlag.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 16).isActive = true
+            missingFundsFlag.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 0).isActive = true
+            missingFundsFlag.heightAnchor.constraint(equalToConstant: 34).isActive = true
+        }
 
         view.addSubview(summaryButton)
         summaryButton.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -16).isActive = true

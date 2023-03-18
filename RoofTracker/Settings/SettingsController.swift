@@ -41,9 +41,9 @@ class SettingsController: UIViewController, editProfileControllerDelegate, UIPic
         yearTextField.inputView = yearPicker
         yearPicker.delegate = self
         yearPicker.dataSource = self
-        
-        setupUI()
         fetchProfileData()
+        setupUI()
+        
 
     }
 
@@ -64,6 +64,7 @@ class SettingsController: UIViewController, editProfileControllerDelegate, UIPic
                     let email = data["email"] as? String
                     let access = data["access"] as? String
                     let companyId = data["companyId"] as? String
+                    let missingFundsTotal = data["missingFundsTotal"] as? Double ?? nil
                     
                     // download the user profile picture image from Firestore
                     // user this code below whenever trying to download an image from firebase
@@ -87,12 +88,28 @@ class SettingsController: UIViewController, editProfileControllerDelegate, UIPic
                     self.emailLabel.text = email
                     self.userEmail = email!
                     
+                    if missingFundsTotal != nil {
+                        let currencyFormatter = NumberFormatter()
+                        currencyFormatter.usesGroupingSeparator = true
+                        currencyFormatter.numberStyle = .currency
+                        currencyFormatter.locale = Locale.current
+                        let currencyFormat = currencyFormatter.string(from: NSNumber(value: missingFundsTotal! ))
+                        self.missingFundsView.setTitle("\(currencyFormat ?? "$0.00") In Missing Funds Found", for: .normal)
+                        self.missingFundsView.setTitleColor(.lightRed, for: .normal)
+
+                    } else {
+                        self.missingFundsView.setTitle("$0.00 In Missing Funds Found", for: .normal)
+                        self.missingFundsView.setTitleColor(.lightRed, for: .normal)
+                    }
+                    
                     if companyId != "" {
                         self.accessLabel.text = access
                         return self.fetchCompany(companyId: companyId!)
                     } else {
                         self.accessLabel.text = "Independent"
                     }
+                    
+                   
 
                 }
             }
@@ -311,6 +328,17 @@ class SettingsController: UIViewController, editProfileControllerDelegate, UIPic
         return button
     }()
     
+    let missingFundsView: UIButton = {
+        let button = UIButton()
+        button.layer.borderColor = UIColor.lightRed.cgColor
+        button.layer.borderWidth = 1
+        button.layer.cornerRadius = 10
+        button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        button.isUserInteractionEnabled = false
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     let resetPasswordLabel: UILabel = {
         let label = UILabel()
         label.text = "Reset Password"
@@ -421,12 +449,18 @@ class SettingsController: UIViewController, editProfileControllerDelegate, UIPic
         
         topWhiteBackgroundView.topAnchor.constraint(equalTo: companyLabel.bottomAnchor, constant: 30).isActive = true
         
+        view.addSubview(missingFundsView)
+        missingFundsView.topAnchor.constraint(equalTo: companyLabel.bottomAnchor, constant: 45).isActive = true
+        missingFundsView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        missingFundsView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 20).isActive = true
+        missingFundsView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -20).isActive = true
+        
         
         view.addSubview(signoutButton)
         signoutButton.heightAnchor.constraint(equalToConstant: 100).isActive = true
         signoutButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
         signoutButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor, constant: -71).isActive = true
-        signoutButton.topAnchor.constraint(equalTo: companyLabel.bottomAnchor, constant: 60).isActive = true
+        signoutButton.topAnchor.constraint(equalTo: missingFundsView.bottomAnchor, constant: 30).isActive = true
         
         view.addSubview(signOutLabel)
         signOutLabel.centerXAnchor.constraint(equalTo: signoutButton.centerXAnchor).isActive = true
@@ -436,7 +470,7 @@ class SettingsController: UIViewController, editProfileControllerDelegate, UIPic
         resetPasswordButton.heightAnchor.constraint(equalToConstant: 100).isActive = true
         resetPasswordButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
         resetPasswordButton.leftAnchor.constraint(equalTo: signoutButton.rightAnchor, constant: 42).isActive = true
-        resetPasswordButton.topAnchor.constraint(equalTo: companyLabel.bottomAnchor, constant: 60).isActive = true
+        resetPasswordButton.topAnchor.constraint(equalTo: missingFundsView.bottomAnchor, constant: 30).isActive = true
         
         view.addSubview(resetPasswordLabel)
         resetPasswordLabel.centerXAnchor.constraint(equalTo: resetPasswordButton.centerXAnchor).isActive = true
