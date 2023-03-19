@@ -51,22 +51,16 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
         
         // "add check" and "add line item" buttons
         let button = UIButton(type: .custom)
-        button.setImage(UIImage (named: "add_check_logo"), for: .normal)
-        button.frame = CGRect(x: 0.0, y: 0.0, width: 35.0, height: 35.0)
+        button.setImage( UIImage(systemName: "dollarsign.circle.fill", withConfiguration: UIImage.SymbolConfiguration(font: .systemFont(ofSize: 25))), for: .normal)
         button.addTarget(self, action: #selector(handleAddCheck), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.widthAnchor.constraint(equalToConstant: 35).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 35).isActive = true
         let barButtonItem = UIBarButtonItem(customView: button)
         
 
         let button2 = UIButton(type: .custom)
-        button2.setImage(UIImage (named: "add_line_item_logo"), for: .normal)
-        button2.frame = CGRect(x: 0.0, y: 0.0, width: 35.0, height: 35.0)
+        button2.setImage(UIImage(systemName: "hammer.circle.fill", withConfiguration: UIImage.SymbolConfiguration(font: .systemFont(ofSize: 25))), for: .normal)
         button2.addTarget(self, action: #selector(handleAddLineItem), for: .touchUpInside)
         button2.translatesAutoresizingMaskIntoConstraints = false
-        button2.widthAnchor.constraint(equalToConstant: 35).isActive = true
-        button2.heightAnchor.constraint(equalToConstant: 35).isActive = true
         let barButtonItem2 = UIBarButtonItem(customView: button2)
         
         self.navigationItem.rightBarButtonItems = [barButtonItem, barButtonItem2]

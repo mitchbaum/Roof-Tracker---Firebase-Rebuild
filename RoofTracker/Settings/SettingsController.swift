@@ -178,14 +178,14 @@ class SettingsController: UIViewController, editProfileControllerDelegate, UIPic
     }
     
     @objc func handleSignOut(sender: UIButton) {
-        print("org signing out test commit")
         Utilities.animateView(sender)
         let signOutAction = UIAlertAction(title: "Sign Out", style: .destructive) { (action) in
             do {
                 try Auth.auth().signOut()
-                self.dismiss(animated: true, completion: nil)
-                //self.presentingViewController?.viewWillAppear(true)
-                print("org signed out")
+                let signInController = SignInController()
+                let navController = CustomNavigationController(rootViewController: signInController)
+                (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(navController)
+                print("user signed out")
             } catch let err {
                 print("Failed to sign out with error ", err)
                 self.showError(title: "Sign Out Error", message: "Please try again.")

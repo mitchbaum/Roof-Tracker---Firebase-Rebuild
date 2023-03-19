@@ -49,6 +49,8 @@
 		80DCB0982618C5840036A290 /* ACVItemCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 80DCB0962618C5830036A290 /* ACVItemCell.xib */; };
 		80DE840E29C114A0006BD05C /* CreateLineItemController+UIPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DE840D29C114A0006BD05C /* CreateLineItemController+UIPickerView.swift */; };
 		80DE841329C11DEA006BD05C /* CreateCheckController+UIPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DE841229C11DEA006BD05C /* CreateCheckController+UIPickerView.swift */; };
+		80F7CA1929C6660800957383 /* TeamController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F7CA1829C6660800957383 /* TeamController.swift */; };
+		80F7CA1B29C6827000957383 /* SignInController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F7CA1A29C6827000957383 /* SignInController.swift */; };
 		8BE980CBC42D5E06DBA1A0A3 /* Pods_RoofTrackerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E69003FDE0DF2EFF13B924D /* Pods_RoofTrackerTests.framework */; };
 		BA9F23E10B276B773BD7FA6B /* Pods_RoofTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9A339285E638C71BE82F6D /* Pods_RoofTracker.framework */; };
 		C3AD288189C661672C363409 /* Pods_RoofTracker_RoofTrackerUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB4D2A8F97DEFC22003DCBC /* Pods_RoofTracker_RoofTrackerUITests.framework */; };
@@ -123,6 +125,8 @@
 		80DCB0962618C5830036A290 /* ACVItemCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ACVItemCell.xib; sourceTree = "<group>"; };
 		80DE840D29C114A0006BD05C /* CreateLineItemController+UIPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CreateLineItemController+UIPickerView.swift"; sourceTree = "<group>"; };
 		80DE841229C11DEA006BD05C /* CreateCheckController+UIPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CreateCheckController+UIPickerView.swift"; sourceTree = "<group>"; };
+		80F7CA1829C6660800957383 /* TeamController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamController.swift; sourceTree = "<group>"; };
+		80F7CA1A29C6827000957383 /* SignInController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInController.swift; sourceTree = "<group>"; };
 		810510E3367E2BF4A39D1A86 /* Pods-RoofTracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RoofTracker.release.xcconfig"; path = "Target Support Files/Pods-RoofTracker/Pods-RoofTracker.release.xcconfig"; sourceTree = "<group>"; };
 		925506ED7BB70A3E0C9EE0A6 /* Pods-RoofTracker-RoofTrackerUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RoofTracker-RoofTrackerUITests.release.xcconfig"; path = "Target Support Files/Pods-RoofTracker-RoofTrackerUITests/Pods-RoofTracker-RoofTrackerUITests.release.xcconfig"; sourceTree = "<group>"; };
 		9886CEAF1860C0DF072D01BB /* Pods-RoofTracker-RoofTrackerUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RoofTracker-RoofTrackerUITests.debug.xcconfig"; path = "Target Support Files/Pods-RoofTracker-RoofTrackerUITests/Pods-RoofTracker-RoofTrackerUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -197,6 +201,7 @@
 				809BCF332838203F00C326B6 /* Helpers */,
 				809BCF3A2838375100C326B6 /* Settings */,
 				809BCF2E2837058500C326B6 /* Sign In */,
+				80F7CA1729C665EB00957383 /* Team */,
 				800E962525EF285F005FB32C /* Files */,
 				800E956C25EAAD4B005FB32C /* AppDelegate.swift */,
 				8090EFC9286C786A00A8D0A2 /* Reachability.swift */,
@@ -248,6 +253,7 @@
 		809BCF2E2837058500C326B6 /* Sign In */ = {
 			isa = PBXGroup;
 			children = (
+				80F7CA1A29C6827000957383 /* SignInController.swift */,
 				809BCF362838208900C326B6 /* CreateUserController.swift */,
 				805E18D728DCEC9B005AB666 /* CreateUserController+UIPickerView.swift */,
 				809BCF38283820DD00C326B6 /* ForgotPasswordController.swift */,
@@ -319,6 +325,14 @@
 				80DCB07325FECB910036A290 /* LineItemTableViewCell.xib */,
 			);
 			path = CreateLineItem;
+			sourceTree = "<group>";
+		};
+		80F7CA1729C665EB00957383 /* Team */ = {
+			isa = PBXGroup;
+			children = (
+				80F7CA1829C6660800957383 /* TeamController.swift */,
+			);
+			path = Team;
 			sourceTree = "<group>";
 		};
 		94F4C822071970F6E007E801 /* Pods */ = {
@@ -581,8 +595,10 @@
 				800E95B525EC2EED005FB32C /* TrainingModels.xcdatamodeld in Sources */,
 				800E963025EF3544005FB32C /* FilesController+UITableView.swift in Sources */,
 				809BCF39283820DD00C326B6 /* ForgotPasswordController.swift in Sources */,
+				80F7CA1929C6660800957383 /* TeamController.swift in Sources */,
 				809BCF40283BE42800C326B6 /* ItemsController+UITableView.swift in Sources */,
 				800E957125EAAD4B005FB32C /* FilesController.swift in Sources */,
+				80F7CA1B29C6827000957383 /* SignInController.swift in Sources */,
 				8090EFCA286C786B00A8D0A2 /* Reachability.swift in Sources */,
 				80DCB07F26167CC40036A290 /* SummaryController.swift in Sources */,
 				809BCF46283D6A2E00C326B6 /* SummaryController+UITableView.swift in Sources */,

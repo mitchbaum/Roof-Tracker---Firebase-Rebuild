@@ -130,9 +130,7 @@ extension FilesController {
             }
         } else {
             let fileType = openClosedSegmentedControl.titleForSegment(at: openClosedSegmentedControl.selectedSegmentIndex)
-            if isSignedIn == false {
-                label.text = ""
-            } else if fileType == "Open" {
+            if fileType == "Open" {
                 label.text = "No open files"
             } else if fileType == "Closed" {
                 label.text = "No closed files"

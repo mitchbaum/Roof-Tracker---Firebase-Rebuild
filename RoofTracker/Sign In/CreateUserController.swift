@@ -110,7 +110,7 @@ class CreateUserController: UIViewController, UIPickerViewDelegate, UIPickerView
 
             self.hud.dismiss(animated: true)
             // transition to home screen
-            self.transitionToHome()
+            return self.setNoTabsRoot()
 
         }
     }
@@ -164,7 +164,7 @@ class CreateUserController: UIViewController, UIPickerViewDelegate, UIPickerView
 
                         self.hud.dismiss(animated: true)
                         // transition to home screen
-                        self.transitionToHome()
+                        return self.setTabsRoot()
 
                     }
                 }
@@ -172,6 +172,30 @@ class CreateUserController: UIViewController, UIPickerViewDelegate, UIPickerView
             
         }
         
+    }
+    
+    func setTabsRoot() {
+        print("in setTabsRoot")
+        let tabBar = UITabBarController()
+        
+        let filesVC = CustomNavigationController(rootViewController: FilesController())
+        let teamVC = CustomNavigationController(rootViewController: TeamController())
+        
+        filesVC.tabBarItem = UITabBarItem(title: "My Files", image: UIImage(systemName: "folder.fill", withConfiguration: UIImage.SymbolConfiguration(weight: .regular)), tag: 0)
+        teamVC.tabBarItem = UITabBarItem(title: "Team", image: UIImage(systemName: "person.3.fill", withConfiguration: UIImage.SymbolConfiguration(weight: .regular)), tag: 1)
+        tabBar.setViewControllers([filesVC, teamVC], animated: false)
+        tabBar.tabBar.tintColor = UIColor.white
+        tabBar.tabBar.backgroundColor = UIColor.darkBlue
+        
+        // This is to get the SceneDelegate object from your view controller
+        // then call the change root view controller function to change to main tab bar
+        (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(tabBar)
+    }
+    
+    func setNoTabsRoot() {
+        let filesController = FilesController()
+        let navController = CustomNavigationController(rootViewController: filesController)
+        (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(navController)
     }
     
     
@@ -199,8 +223,8 @@ class CreateUserController: UIViewController, UIPickerViewDelegate, UIPickerView
          transition.subtype = CATransitionSubtype.fromLeft
          self.navigationController?.view.layer.add(transition, forKey: kCATransition)
         // validate the fields
-        let filesController = FilesController()
-        navigationController?.pushViewController(filesController, animated: true)
+        let signInController = SignInController()
+        navigationController?.pushViewController(signInController, animated: true)
         
     }
 
@@ -698,10 +722,6 @@ class CreateUserController: UIViewController, UIPickerViewDelegate, UIPickerView
         alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
         present(alertController, animated: true, completion: nil)
         return
-    }
-    func transitionToHome() {
-        let filesController = FilesController()
-        navigationController?.pushViewController(filesController, animated: true)
     }
     
     private func dismissKeyboardGesture() {
