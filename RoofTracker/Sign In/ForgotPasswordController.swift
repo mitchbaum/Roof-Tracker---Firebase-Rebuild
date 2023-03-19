@@ -111,7 +111,7 @@ class ForgotPasswordController: UIViewController {
     }()
     
     let emailIcon: UIImageView = {
-        let imageView = UIImageView(image: #imageLiteral(resourceName: "email_icon"))
+        let imageView = UIImageView(image: UIImage(systemName: "envelope.fill", withConfiguration: UIImage.SymbolConfiguration(weight: .regular))?.withTintColor(.black, renderingMode: .alwaysOriginal))
         imageView.translatesAutoresizingMaskIntoConstraints = false
         // alters the squashed look to make the image appear normal in the view, fixes aspect ratio
         imageView.contentMode = .scaleAspectFit

@@ -302,10 +302,9 @@ class CreateUserController: UIViewController, UIPickerViewDelegate, UIPickerView
     }()
     
     let usernameIcon: UIImageView = {
-        let imageView = UIImageView(image: #imageLiteral(resourceName: "username_icon"))
+        let imageView = UIImageView(image: UIImage(systemName: "person.fill", withConfiguration: UIImage.SymbolConfiguration(weight: .regular))?.withTintColor(.black, renderingMode: .alwaysOriginal))
         imageView.translatesAutoresizingMaskIntoConstraints = false
         // alters the squashed look to make the image appear normal in the view, fixes aspect ratio
-        imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         return imageView
         
@@ -336,7 +335,7 @@ class CreateUserController: UIViewController, UIPickerViewDelegate, UIPickerView
     }()
     
     let emailIcon: UIImageView = {
-        let imageView = UIImageView(image: #imageLiteral(resourceName: "email_icon"))
+        let imageView = UIImageView(image: UIImage(systemName: "envelope.fill", withConfiguration: UIImage.SymbolConfiguration(weight: .regular))?.withTintColor(.black, renderingMode: .alwaysOriginal))
         imageView.translatesAutoresizingMaskIntoConstraints = false
         // alters the squashed look to make the image appear normal in the view, fixes aspect ratio
         imageView.contentMode = .scaleAspectFit
@@ -371,10 +370,9 @@ class CreateUserController: UIViewController, UIPickerViewDelegate, UIPickerView
     }()
     
     let passowrdIcon: UIImageView = {
-        let imageView = UIImageView(image: #imageLiteral(resourceName: "password_icon"))
+        let imageView = UIImageView(image: UIImage(systemName: "lock.fill", withConfiguration: UIImage.SymbolConfiguration(weight: .regular))?.withTintColor(.black, renderingMode: .alwaysOriginal))
         imageView.translatesAutoresizingMaskIntoConstraints = false
         // alters the squashed look to make the image appear normal in the view, fixes aspect ratio
-        imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         return imageView
         
@@ -407,10 +405,9 @@ class CreateUserController: UIViewController, UIPickerViewDelegate, UIPickerView
     }()
     
     let reenterPassowrdIcon: UIImageView = {
-        let imageView = UIImageView(image: #imageLiteral(resourceName: "password_icon"))
+        let imageView = UIImageView(image: UIImage(systemName: "lock.fill", withConfiguration: UIImage.SymbolConfiguration(weight: .regular))?.withTintColor(.black, renderingMode: .alwaysOriginal))
         imageView.translatesAutoresizingMaskIntoConstraints = false
         // alters the squashed look to make the image appear normal in the view, fixes aspect ratio
-        imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         return imageView
         
@@ -506,7 +503,7 @@ class CreateUserController: UIViewController, UIPickerViewDelegate, UIPickerView
     }()
     
     let regCodeIcon: UIImageView = {
-        let imageView = UIImageView(image: #imageLiteral(resourceName: "reg_code_icon"))
+        let imageView = UIImageView(image: UIImage(systemName: "key.fill", withConfiguration: UIImage.SymbolConfiguration(weight: .regular))?.withTintColor(.black, renderingMode: .alwaysOriginal))
         imageView.translatesAutoresizingMaskIntoConstraints = false
         // alters the squashed look to make the image appear normal in the view, fixes aspect ratio
         imageView.contentMode = .scaleAspectFit

@@ -242,13 +242,12 @@ class SettingsController: UIViewController, editProfileControllerDelegate, UIPic
         let button = UIButton()
         button.backgroundColor = UIColor(red: 41/255, green: 51/255, blue: 72/255, alpha: 1)
         //button.backgroundColor = .white
-        button.layer.cornerRadius = 15
+        button.layer.cornerRadius = 19
 //        button.layer.borderColor = UIColor.lightRed.cgColor
-//        button.layer.borderWidth = 0.5
-        button.setTitle("✎", for: .normal)
+//        button.layer.borderWidth = 5
+        button.setImage(UIImage(systemName: "pencil", withConfiguration: UIImage.SymbolConfiguration(font: .systemFont(ofSize: 25)))?.withTintColor(.white, renderingMode: .alwaysOriginal), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(handleEditProfile(sender:)), for: .touchUpInside)
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15.0)
         // enable autolayout
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -425,6 +424,8 @@ class SettingsController: UIViewController, editProfileControllerDelegate, UIPic
         view.addSubview(editIcon)
         editIcon.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -20).isActive = true
         editIcon.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 25).isActive = true
+        editIcon.heightAnchor.constraint(equalToConstant: 38).isActive = true
+        editIcon.widthAnchor.constraint(equalToConstant: 38).isActive = true
         
         
         view.addSubview(accessLabel)
