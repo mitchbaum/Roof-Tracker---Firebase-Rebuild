@@ -19,10 +19,6 @@ import CoreData
 class FilesController: UITableViewController, UISearchBarDelegate, UISearchResultsUpdating {
     
     let reachability = try! Reachability()
-    
-    // let: constant
-    // var: variable that can be modified
-    // initilalize array with list of things
     var files = [FB_File]() // empty array
     // this variable is for the search feature
     var filteredFiles = [FB_File]()
@@ -31,12 +27,8 @@ class FilesController: UITableViewController, UISearchBarDelegate, UISearchResul
     var file: FB_File?
     
     var filesNameOnly = [String]()
-    
-//    var openFiles = [File]()
-//    var closedFiles = [File]()
     // this variable is for the open close segmented control feature
     // the "lazy" means that this variable is created AFTER the files variable is created.
-
     let searchController = UISearchController()
     
     var filesCollectionRef: CollectionReference!

@@ -1,8 +1,8 @@
 //
-//  EmployeesController.swift
-//  TrainingCourse
+//  TeamFileDetails.swift
+//  RoofTracker
 //
-//  Created by Mitch Baumgartner on 3/2/21.
+//  Created by Mitch Baumgartner on 3/19/23.
 //
 
 import UIKit
@@ -15,55 +15,43 @@ import LBTATools
 import JGProgressHUD
 
 
-class ItemsController: UITableViewController, createCheckControllerDelegate, createLineItemControllerDelegate {
+class TeamFileDetailsController: UITableViewController {
 
+    var teamMember: TeamMember?
     var file: FB_File?
     var itemInformation: FB_ItemInformation?
-    var filesCollectionRef: CollectionReference!
     let db = Firestore.firestore()
     
-    // an array of arrays of items
-    var allItems = [[FileItem]]()
     var FB_allItems = [FB_ItemInformation]()
     var tableViewItems = [[FB_ItemInformation]]()
     
     var hasCredit = false
+    let itemCellId = "itemCellId"
     
-    // this function controls what the employee view controller looks like when user taps on it
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.estimatedRowHeight = 50
         tableView.rowHeight = UITableView.automaticDimension
-        navigationItem.title = file?.name
         fetchFileItems()
-
     }
     
     // this function controls how the controller is styled
     override func viewDidLoad() {
         super.viewDidLoad()
         //fetchInsToHOTotal()
+        // title
+        navigationItem.title = file?.name
+        navigationController?.transparentNavigationBar()
+        navigationController?.setTintColor(.white)
+        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         tableView.backgroundColor = UIColor.darkBlue
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: itemCellId)
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = 0
         }
-        
-        // "add check" and "add line item" buttons
-        let button = UIButton(type: .custom)
-        button.setImage( UIImage(systemName: "dollarsign.circle.fill", withConfiguration: UIImage.SymbolConfiguration(font: .systemFont(ofSize: 25))), for: .normal)
-        button.addTarget(self, action: #selector(handleAddCheck), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        let barButtonItem = UIBarButtonItem(customView: button)
-        
-
-        let button2 = UIButton(type: .custom)
-        button2.setImage(UIImage(systemName: "hammer.circle.fill", withConfiguration: UIImage.SymbolConfiguration(font: .systemFont(ofSize: 25))), for: .normal)
-        button2.addTarget(self, action: #selector(handleAddLineItem), for: .touchUpInside)
-        button2.translatesAutoresizingMaskIntoConstraints = false
-        let barButtonItem2 = UIBarButtonItem(customView: button2)
-        
-        self.navigationItem.rightBarButtonItems = [barButtonItem, barButtonItem2]
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(handleDone))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Sales's Rep: \(teamMember?.name ?? "")", style: .plain, target: self, action: nil)
+        navigationItem.leftBarButtonItem?.isEnabled = false
         
         // get the note first before UI is built and before table rows are built.
         noteLabelInfo.text = file?.note
@@ -80,88 +68,6 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
         viewWillAppear(true)
 
     }
-    
-    func rightBarButtonItem(iconNameButton: String, selector: Selector) {
-        let button = UIButton()
-        button.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
-        
-        button.setImage(UIImage(named: iconNameButton), for: .normal)
-        button.addTarget(self, action: selector, for: .touchUpInside)
-        button.imageView?.contentMode = .scaleAspectFit
-
-        let buttonBarButton = UIBarButtonItem(customView: UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 40)))
-        buttonBarButton.customView?.addSubview(button)
-        buttonBarButton.customView?.frame = button.frame
-
-        self.navigationItem.rightBarButtonItem = buttonBarButton
-    }
-    
-    // append each employee we recieve from this method call (didAddEmployee) to the file associated with the employee
-    // this is called when we dismiss empoyee creation
-    func didAddItem() {
-        print("did add item")
-
-        tableView.reloadData()
-        // refresh the balance remaining label
-        viewWillAppear(true)
-        
-    }
-    
-    func didEditItem(item: FB_ItemInformation) {
-        print("in didEditITem")
-        tableView.reloadData()
-        reloadEditedRow(item: item)
-        viewWillAppear(true)
-        
-    }
-    func reloadEditedRow(item: FB_ItemInformation) {
-        if item.type == "Insurance" {
-            let row = tableViewItems[0].firstIndex(of: item)
-            let reloadIndexPath = IndexPath(row: row!, section: 0)
-            tableView.reloadRows(at: [reloadIndexPath], with: .middle)
-        }
-        if item.type == "Insurance PAID" {
-            let row = tableViewItems[1].firstIndex(of: item)
-            let reloadIndexPath = IndexPath(row: row!, section: 1)
-            tableView.reloadRows(at: [reloadIndexPath], with: .middle)
-        }
-        if item.type == "Personal" {
-            let row = tableViewItems[2].firstIndex(of: item)
-            let reloadIndexPath = IndexPath(row: row!, section: 2)
-            tableView.reloadRows(at: [reloadIndexPath], with: .middle)
-        }
-        if item.type == "ACV owed to HO" {
-            let row = tableViewItems[3].firstIndex(of: item)
-            let reloadIndexPath = IndexPath(row: row!, section: 3)
-            tableView.reloadRows(at: [reloadIndexPath], with: .middle)
-        }
-        if item.type == "RCV work to do" {
-            let row = tableViewItems[4].firstIndex(of: item)
-            let reloadIndexPath = IndexPath(row: row!, section: 4)
-            tableView.reloadRows(at: [reloadIndexPath], with: .middle)
-        }
-        if item.type == "Cash work to do" {
-            let row = tableViewItems[5].firstIndex(of: item)
-            let reloadIndexPath = IndexPath(row: row!, section: 5)
-            tableView.reloadRows(at: [reloadIndexPath], with: .middle)
-        }
-        if item.type == "Credit" {
-            let row = tableViewItems[6].firstIndex(of: item)
-            let reloadIndexPath = IndexPath(row: row!, section: 6)
-            tableView.reloadRows(at: [reloadIndexPath], with: .middle)
-        }
-    }
-    
-    public func saveTime() {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        guard let file = self.file else { return }
-        
-        let timeStamp = "\(DateFormatter.localizedString(from: Date(), dateStyle: .long, timeStyle: .long))"
-        db.collection("Users").document(uid).collection("Files").document((file.id)!).updateData(["timeStamp" : timeStamp, "modified" :  FieldValue.serverTimestamp()])
-        
-        
-    }
-    
     
     func getSummaryValues() {
         print("in getSummaryValues")
@@ -182,7 +88,6 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
             let cashTotal = Double(file?.cashItemTotal ?? "")
             let pymtsMade = Double(file?.pymtCheckTotal ?? "")
             let invoiceBalance = invoice + (cashTotal ?? 0.00) - (pymtsMade ?? 0.00)
-            print("invoiceBalance = ", invoiceBalance)
             
             let invoiceBalanceMessage = currencyFormatter.string(from: NSNumber(value: invoiceBalance))
             invoiceBalanceTotalLabelInfo.text = invoiceBalanceMessage
@@ -281,10 +186,6 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
             creditLabel.textColor = UIColor.lightRed
             invoiceTotalLabel.text = "Invoice Total (Invoice - Credit)"
         }
-        print("hasCredit: ", hasCredit)
-        
-        
-        noteLabelInfo.text = file?.note
         
     }
     
@@ -293,8 +194,7 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
         FB_allItems = []
         print("Fetching files from Firebase")
         guard let uid = Auth.auth().currentUser?.uid else { return }
-        filesCollectionRef = db.collection("Users").document(uid).collection("Files").document((file?.id)!).collection("FileInformation")
-        filesCollectionRef.getDocuments { (snapshot, error) in
+        db.collection("Users").document((teamMember?.id)!).collection("Files").document((file?.id)!).collection("FileInformation").getDocuments { (snapshot, error) in
             if let err = error {
                 debugPrint("Error fetching files: \(err)")
             } else {
@@ -367,16 +267,6 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
         file?.rcvItemTotal = String(RCVItemTotal)
         file?.creditItemTotal = String(CreditItemTotal)
 
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        self.db.collection("Users").document(uid).collection("Files").document((file?.id)!).setData([
-                                                                "insCheckTotal" : String(insCheckTotal),
-                                                                "acvItemTotal" : String(ACVItemTotal),
-                                                                "insCheckACVTotal" : String(ACVItemTotal - insCheckTotal),
-                                                                "cashItemTotal" : String(cashItemTotal),
-                                                                "pymtCheckTotal" : String(pymtCheckTotal),
-                                                                "rcvItemTotal" : String(RCVItemTotal),
-                                                                "creditItemTotal" : String (CreditItemTotal)
-        ], merge: true)
         
         getSummaryValues()
         tableView.reloadData()
@@ -437,13 +327,7 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
         
         
     }
-
     
-    
-    
-    
-    let itemCellId = "itemCellId"
-
     let missingFundsFlag: UIButton = {
         let button = UIButton()
         button.layer.borderColor = UIColor.lightRed.cgColor
@@ -689,20 +573,6 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
         return label
     }()
     
-//    let noteLabelInfo: UITextView = {
-//        let label = UITextView()
-//        label.text = "This is a note that will be placed here and says many things that i would like tefile to read through."
-//        // label.backgroundColor = .red
-//        // enable autolayout
-//        label.translatesAutoresizingMaskIntoConstraints = false
-//        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-////        label.numberOfLines = 0
-////        label.lineBreakMode = .byWordWrapping
-//        label.backgroundColor = .darkBlue
-//        label.textColor = .white
-//        return label
-//    }()
-    
     let notesCardView : UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -846,12 +716,7 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
         noteLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 16).isActive = true
         noteLabel.topAnchor.constraint(equalTo: line.bottomAnchor).isActive = true
         noteLabel.heightAnchor.constraint(equalToConstant: 35).isActive = true
-
-        //containerView.addSubview(notesCardView)
-//        notesCardView.topAnchor.constraint(equalTo: noteLabel.bottomAnchor, constant: 5).isActive = true
-//        notesCardView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 5).isActive = true
-//        notesCardView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -5).isActive = true
-
+        
         containerView.addSubview(noteLabelInfo)
         noteLabelInfo.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 24).isActive = true
         noteLabelInfo.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -16).isActive = true
@@ -861,37 +726,8 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
         containerView.bottomAnchor.constraint(equalTo: noteLabelInfo.bottomAnchor).isActive = true
         //notesCardView.bottomAnchor.constraint(equalTo: noteLabelInfo.bottomAnchor, constant: 5).isActive = true
 
-
-
         tableView.tableHeaderView = containerView
 
-
-
-    }
-    
-    
-    // add new check button handler
-    @objc private func handleAddCheck() {
-        print("trying to add new check")
-        // show CreatEemployeeController
-        let createCheckController = CreateCheckController()
-        createCheckController.delegate = self
-        createCheckController.file = file
-        // this creates the red top nav portion that holds the create file name, cancel button, save button
-        let navController = UINavigationController(rootViewController: createCheckController)
-        present(navController, animated: true, completion: nil)
-    }
-    
-    // add new line item button handler
-    @objc private func handleAddLineItem() {
-        print("trying to add new line item")
-        // show CreatEemployeeController
-        let createLineItemController = CreateLineItemController()
-        createLineItemController.delegate = self
-        createLineItemController.file = file
-        // this creates the red top nav portion that holds the create file name, cancel button, save button
-        let navController = UINavigationController(rootViewController: createLineItemController)
-        present(navController, animated: true, completion: nil)
     }
     
     // send to office controller
@@ -928,4 +764,8 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
         }
     }
     
+    @objc func handleDone() {
+        dismiss(animated: true, completion: nil)
+    }
 }
+

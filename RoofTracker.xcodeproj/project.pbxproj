@@ -51,6 +51,13 @@
 		80DE841329C11DEA006BD05C /* CreateCheckController+UIPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DE841229C11DEA006BD05C /* CreateCheckController+UIPickerView.swift */; };
 		80F7CA1929C6660800957383 /* TeamController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F7CA1829C6660800957383 /* TeamController.swift */; };
 		80F7CA1B29C6827000957383 /* SignInController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F7CA1A29C6827000957383 /* SignInController.swift */; };
+		80F7CA1D29C761B300957383 /* TeamController+UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F7CA1C29C761B200957383 /* TeamController+UITableView.swift */; };
+		80F7CA1F29C7624500957383 /* TeamModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F7CA1E29C7624500957383 /* TeamModel.swift */; };
+		80F7CA2129C7633400957383 /* TeamCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F7CA2029C7633400957383 /* TeamCell.swift */; };
+		80F7CA2429C78F4C00957383 /* TeamMemberController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F7CA2329C78F4B00957383 /* TeamMemberController.swift */; };
+		80F7CA2629C7915300957383 /* TeamMemberController+UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F7CA2529C7915300957383 /* TeamMemberController+UITableView.swift */; };
+		80F7CA2929C7994100957383 /* TeamFileDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F7CA2829C7994000957383 /* TeamFileDetailsController.swift */; };
+		80F7CA2B29C7995800957383 /* TeamFileDetailsController+UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F7CA2A29C7995800957383 /* TeamFileDetailsController+UITableView.swift */; };
 		8BE980CBC42D5E06DBA1A0A3 /* Pods_RoofTrackerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E69003FDE0DF2EFF13B924D /* Pods_RoofTrackerTests.framework */; };
 		BA9F23E10B276B773BD7FA6B /* Pods_RoofTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9A339285E638C71BE82F6D /* Pods_RoofTracker.framework */; };
 		C3AD288189C661672C363409 /* Pods_RoofTracker_RoofTrackerUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB4D2A8F97DEFC22003DCBC /* Pods_RoofTracker_RoofTrackerUITests.framework */; };
@@ -127,6 +134,13 @@
 		80DE841229C11DEA006BD05C /* CreateCheckController+UIPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CreateCheckController+UIPickerView.swift"; sourceTree = "<group>"; };
 		80F7CA1829C6660800957383 /* TeamController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamController.swift; sourceTree = "<group>"; };
 		80F7CA1A29C6827000957383 /* SignInController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInController.swift; sourceTree = "<group>"; };
+		80F7CA1C29C761B200957383 /* TeamController+UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TeamController+UITableView.swift"; sourceTree = "<group>"; };
+		80F7CA1E29C7624500957383 /* TeamModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamModel.swift; sourceTree = "<group>"; };
+		80F7CA2029C7633400957383 /* TeamCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamCell.swift; sourceTree = "<group>"; };
+		80F7CA2329C78F4B00957383 /* TeamMemberController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamMemberController.swift; sourceTree = "<group>"; };
+		80F7CA2529C7915300957383 /* TeamMemberController+UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TeamMemberController+UITableView.swift"; sourceTree = "<group>"; };
+		80F7CA2829C7994000957383 /* TeamFileDetailsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamFileDetailsController.swift; sourceTree = "<group>"; };
+		80F7CA2A29C7995800957383 /* TeamFileDetailsController+UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TeamFileDetailsController+UITableView.swift"; sourceTree = "<group>"; };
 		810510E3367E2BF4A39D1A86 /* Pods-RoofTracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RoofTracker.release.xcconfig"; path = "Target Support Files/Pods-RoofTracker/Pods-RoofTracker.release.xcconfig"; sourceTree = "<group>"; };
 		925506ED7BB70A3E0C9EE0A6 /* Pods-RoofTracker-RoofTrackerUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RoofTracker-RoofTrackerUITests.release.xcconfig"; path = "Target Support Files/Pods-RoofTracker-RoofTrackerUITests/Pods-RoofTracker-RoofTrackerUITests.release.xcconfig"; sourceTree = "<group>"; };
 		9886CEAF1860C0DF072D01BB /* Pods-RoofTracker-RoofTrackerUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RoofTracker-RoofTrackerUITests.debug.xcconfig"; path = "Target Support Files/Pods-RoofTracker-RoofTrackerUITests/Pods-RoofTracker-RoofTrackerUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -330,9 +344,32 @@
 		80F7CA1729C665EB00957383 /* Team */ = {
 			isa = PBXGroup;
 			children = (
+				80F7CA2229C78E8F00957383 /* TeamMember */,
 				80F7CA1829C6660800957383 /* TeamController.swift */,
+				80F7CA1C29C761B200957383 /* TeamController+UITableView.swift */,
+				80F7CA1E29C7624500957383 /* TeamModel.swift */,
+				80F7CA2029C7633400957383 /* TeamCell.swift */,
 			);
 			path = Team;
+			sourceTree = "<group>";
+		};
+		80F7CA2229C78E8F00957383 /* TeamMember */ = {
+			isa = PBXGroup;
+			children = (
+				80F7CA2729C798A000957383 /* Details */,
+				80F7CA2329C78F4B00957383 /* TeamMemberController.swift */,
+				80F7CA2529C7915300957383 /* TeamMemberController+UITableView.swift */,
+			);
+			path = TeamMember;
+			sourceTree = "<group>";
+		};
+		80F7CA2729C798A000957383 /* Details */ = {
+			isa = PBXGroup;
+			children = (
+				80F7CA2829C7994000957383 /* TeamFileDetailsController.swift */,
+				80F7CA2A29C7995800957383 /* TeamFileDetailsController+UITableView.swift */,
+			);
+			path = Details;
 			sourceTree = "<group>";
 		};
 		94F4C822071970F6E007E801 /* Pods */ = {
@@ -593,16 +630,21 @@
 			files = (
 				80DCB06D25FEC3D00036A290 /* CheckTableViewCell.swift in Sources */,
 				800E95B525EC2EED005FB32C /* TrainingModels.xcdatamodeld in Sources */,
+				80F7CA1F29C7624500957383 /* TeamModel.swift in Sources */,
 				800E963025EF3544005FB32C /* FilesController+UITableView.swift in Sources */,
 				809BCF39283820DD00C326B6 /* ForgotPasswordController.swift in Sources */,
+				80F7CA2929C7994100957383 /* TeamFileDetailsController.swift in Sources */,
 				80F7CA1929C6660800957383 /* TeamController.swift in Sources */,
+				80F7CA2429C78F4C00957383 /* TeamMemberController.swift in Sources */,
 				809BCF40283BE42800C326B6 /* ItemsController+UITableView.swift in Sources */,
 				800E957125EAAD4B005FB32C /* FilesController.swift in Sources */,
 				80F7CA1B29C6827000957383 /* SignInController.swift in Sources */,
 				8090EFCA286C786B00A8D0A2 /* Reachability.swift in Sources */,
+				80F7CA2629C7915300957383 /* TeamMemberController+UITableView.swift in Sources */,
 				80DCB07F26167CC40036A290 /* SummaryController.swift in Sources */,
 				809BCF46283D6A2E00C326B6 /* SummaryController+UITableView.swift in Sources */,
 				800E95A125EAB933005FB32C /* UIColor+theme.swift in Sources */,
+				80F7CA1D29C761B300957383 /* TeamController+UITableView.swift in Sources */,
 				80DCB04525F5CFB30036A290 /* CreateLineItemController.swift in Sources */,
 				800E956D25EAAD4B005FB32C /* AppDelegate.swift in Sources */,
 				800E962125EF2703005FB32C /* FileCell.swift in Sources */,
@@ -610,6 +652,7 @@
 				8090EFCE286CB17700A8D0A2 /* SettingsController+UIPickerView.swift in Sources */,
 				800E963525EF3A1E005FB32C /* ItemsController.swift in Sources */,
 				80DCB0902618C0680036A290 /* InsuranceCheckCell.swift in Sources */,
+				80F7CA2B29C7995800957383 /* TeamFileDetailsController+UITableView.swift in Sources */,
 				805E18D828DCEC9B005AB666 /* CreateUserController+UIPickerView.swift in Sources */,
 				80DCB07425FECB910036A290 /* LineItemTableViewCell.swift in Sources */,
 				800E956F25EAAD4B005FB32C /* SceneDelegate.swift in Sources */,
@@ -617,6 +660,7 @@
 				809BCF42283BEEA400C326B6 /* ItemInformationModel.swift in Sources */,
 				80DCB0972618C5840036A290 /* ACVItemCell.swift in Sources */,
 				80DE840E29C114A0006BD05C /* CreateLineItemController+UIPickerView.swift in Sources */,
+				80F7CA2129C7633400957383 /* TeamCell.swift in Sources */,
 				800E95AE25EAC0FA005FB32C /* CreateFileController.swift in Sources */,
 				8090EFCC286C8C2B00A8D0A2 /* EditProfileController.swift in Sources */,
 				809BCF3E2839811C00C326B6 /* FileModel.swift in Sources */,
