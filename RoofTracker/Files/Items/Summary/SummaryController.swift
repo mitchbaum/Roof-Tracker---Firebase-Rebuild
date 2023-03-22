@@ -20,8 +20,9 @@ class SummaryController: UITableViewController {
     let db = Firestore.firestore()
     
     let itemCellId = "itemCellId"
-    
+
     var file: FB_File? // File? (optional) means it can start as nil
+    var teamMember: TeamMember?
     // an array of arrays of employees
     var allItems = [[FileItem]]()
     var FB_allItems = [FB_ItemInformation]()
@@ -61,9 +62,15 @@ class SummaryController: UITableViewController {
     
     func fetchFileItems() {
         FB_allItems = []
-        print("Fetching files from Firebase")
         guard let uid = Auth.auth().currentUser?.uid else { return }
-        filesCollectionRef = db.collection("Users").document(uid).collection("Files").document((file?.id)!).collection("FileInformation")
+        if teamMember != nil {
+            filesCollectionRef = db.collection("Users").document((teamMember?.id)!).collection("Files").document((file?.id)!).collection("FileInformation")
+        } else {
+            filesCollectionRef = db.collection("Users").document(uid).collection("Files").document((file?.id)!).collection("FileInformation")
+        }
+        print("Fetching files from Firebase")
+        
+        
         filesCollectionRef.getDocuments { (snapshot, error) in
             if let err = error {
                 debugPrint("Error fetching files: \(err)")

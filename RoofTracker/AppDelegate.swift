@@ -50,7 +50,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // makes text "cancel" button white color
         UINavigationBar.appearance().tintColor = .white
         UIWindow.appearance().overrideUserInterfaceStyle = .light
-
+        
+        UITabBar.appearance().barTintColor = UIColor.darkBlue
+        UITabBar.appearance().overrideUserInterfaceStyle = .light
+        UITabBar.appearance().isTranslucent = true
         if #available(iOS 13.0, *) {
             let appearance = UINavigationBarAppearance()
             UINavigationBar.appearance().tintColor = .white

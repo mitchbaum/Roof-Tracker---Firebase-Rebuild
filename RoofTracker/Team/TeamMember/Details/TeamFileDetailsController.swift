@@ -736,6 +736,7 @@ class TeamFileDetailsController: UITableViewController {
         // show summaryController
         let summaryController = SummaryController()
         summaryController.file = file
+        summaryController.teamMember = teamMember
         // this creates the red top nav portion that holds the file name, done button
         let navController = UINavigationController(rootViewController: summaryController)
         // add animation to the button

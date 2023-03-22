@@ -78,14 +78,26 @@ class FileCell: UITableViewCell {
             }
 
             if let missingFunds =  file?.missingFundsSwitch {
+                print("fileCell \(file!.name) missingfundsswitch = ", missingFunds)
                 if missingFunds == true {
-                    missingFundsLabel.layer.backgroundColor = UIColor.lightRed.cgColor
-                    missingFundsLabel.contentEdgeInsets = UIEdgeInsets(top: 3, left: 10, bottom: 3, right: 10)
-                    missingFundsLabel.setTitle("In Pursuit of Missing Funds", for: .normal)
-                    missingFundsLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
+//                    missingFundsLabel.layer.backgroundColor = UIColor.lightRed.cgColor
+//                    missingFundsLabel.contentEdgeInsets = UIEdgeInsets(top: 3, left: 10, bottom: 3, right: 10)
+//                    missingFundsLabel.setTitle("In Pursuit of Missing Funds", for: .normal)
+//                    missingFundsLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
+                    
+                    closedLabel.text = "Pursuing Missing Funds"
+                    closedLabel.textColor = UIColor.lightRed
+                    //closedLabel.layer.backgroundColor = UIColor.lightBlue.cgColor
+                    
                     
                 } else {
-                    missingFundsLabel.heightAnchor.constraint(equalToConstant: 0).isActive = true
+//                    missingFundsLabel.setTitle("", for: .normal)
+//                    missingFundsLabel.layer.backgroundColor = UIColor.white.cgColor
+//                    missingFundsLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
+                    
+                    closedLabel.textColor = UIColor.darkGray
+                    
+                    
                 }
             }
             
@@ -221,27 +233,27 @@ class FileCell: UITableViewCell {
         // placement of file message in cell
         addSubview(messageLabel)
         messageLabel.leftAnchor.constraint(equalTo: fileImageView.rightAnchor, constant: 11).isActive = true
-        messageLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 5).isActive = true
+        messageLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 10).isActive = true
         //messageLabel.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         
         addSubview(postMessageLabel)
         postMessageLabel.leftAnchor.constraint(equalTo: messageLabel.rightAnchor, constant: 5).isActive = true
-        postMessageLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 13).isActive = true
+        postMessageLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 18).isActive = true
         //postMessageLabel.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
 
-            addSubview(missingFundsLabel)
-            missingFundsLabel.leftAnchor.constraint(equalTo: fileImageView.rightAnchor, constant: 11).isActive = true
-            missingFundsLabel.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 5).isActive = true
+//            addSubview(missingFundsLabel)
+//            missingFundsLabel.leftAnchor.constraint(equalTo: fileImageView.rightAnchor, constant: 11).isActive = true
+//            missingFundsLabel.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 5).isActive = true
             
             addSubview(timestampLabel)
             timestampLabel.leftAnchor.constraint(equalTo: fileImageView.rightAnchor, constant: 11).isActive = true
-            timestampLabel.topAnchor.constraint(equalTo: missingFundsLabel.bottomAnchor, constant: 5).isActive = true
+            timestampLabel.topAnchor.constraint(equalTo: postMessageLabel.bottomAnchor, constant: 10).isActive = true
             timestampLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8).isActive = true
             
             // placement of timestamp label in cell
             addSubview(closedLabel)
             closedLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -16).isActive = true
-            closedLabel.topAnchor.constraint(equalTo: missingFundsLabel.bottomAnchor, constant: 5).isActive = true
+            closedLabel.topAnchor.constraint(equalTo: postMessageLabel.bottomAnchor, constant: 10).isActive = true
             closedLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8).isActive = true
 
     }
