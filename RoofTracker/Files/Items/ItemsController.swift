@@ -27,8 +27,6 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
     var FB_allItems = [FB_ItemInformation]()
     var tableViewItems = [[FB_ItemInformation]]()
     
-    var hasCredit = false
-    
     // this function controls what the employee view controller looks like when user taps on it
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -170,22 +168,20 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
         currencyFormatter.numberStyle = .currency
         currencyFormatter.locale = Locale.current
         // make date show up pretty in cell by unwrapping name and founded property
-        if let coc = Double(file?.coc ?? ""), let invoice = Double(file?.invoice ?? ""), let deductible = Double(file?.deductible ?? "") {
+        if let coc = Double(file?.coc ?? ""), let deductible = Double(file?.deductible ?? "") {
             let cocMessage = currencyFormatter.string(from: NSNumber(value: coc))
             cocTotalLabelInfo.text = cocMessage
             let credit = Double(file?.creditItemTotal ?? "")
-            let invoiceMinusCredit = invoice - (credit ?? 0.0)
-            let invoiceMessage = currencyFormatter.string(from: NSNumber(value: invoiceMinusCredit))
+            let cocMinusCredit = coc - (credit ?? 0.0)
+            let invoiceMessage = currencyFormatter.string(from: NSNumber(value: cocMinusCredit))
             invoiceTotalLabelInfo.text = invoiceMessage
             let deductibleMessage = currencyFormatter.string(from: NSNumber(value: deductible))
             deductibleTotalLabelInfo.text = deductibleMessage
             let cashTotal = Double(file?.cashItemTotal ?? "")
             let pymtsMade = Double(file?.pymtCheckTotal ?? "")
-            let invoiceBalance = invoice + (cashTotal ?? 0.00) - (pymtsMade ?? 0.00)
-            print("invoiceBalance = ", invoiceBalance)
-            
-            let invoiceBalanceMessage = currencyFormatter.string(from: NSNumber(value: invoiceBalance))
-            invoiceBalanceTotalLabelInfo.text = invoiceBalanceMessage
+            let whatsDue = coc + (cashTotal ?? 0.00) - (pymtsMade ?? 0.00) - (credit ?? 0.0)
+            let whatsDueMessage = currencyFormatter.string(from: NSNumber(value: whatsDue))
+            invoiceBalanceTotalLabelInfo.text = whatsDueMessage
             
 
             
@@ -198,9 +194,10 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
                 cocTotalLabelInfo.text = cocMessage
             }
             
+            // invoice and coc are the same unless there's credit applied
             invoiceTotalLabelInfo.text = ""
-            if file?.invoice != "" {
-                let invoice = Double(file?.invoice ?? "")
+            if file?.coc != "" {
+                let invoice = Double(file?.coc ?? "")
                 let invoiceMessage = currencyFormatter.string(from: NSNumber(value: invoice ?? 0.00))
                 invoiceTotalLabelInfo.text = invoiceMessage
             }
@@ -212,25 +209,20 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
                 deductibleTotalLabelInfo.text = deductibleMessage
             }
             
-        } else if Double(file?.invoice ?? "") != nil {
+        } else if Double(file?.coc ?? "") != nil {
             cocTotalLabelInfo.text = ""
             if file?.coc != "" {
                 let coc = Double(file?.coc ?? "")
                 let cocMessage = currencyFormatter.string(from: NSNumber(value: coc ?? 0.00))
                 cocTotalLabelInfo.text = cocMessage
+                // set invoice label
+                let invoice = Double(file?.coc ?? "")
+                let invoiceMessage = currencyFormatter.string(from: NSNumber(value: invoice ?? 0.00))
+                invoiceTotalLabelInfo.text = invoiceMessage
+                deductibleTotalLabelInfo.text = file?.deductible
             }
-            let invoice = Double(file?.invoice ?? "")
-            let invoiceMessage = currencyFormatter.string(from: NSNumber(value: invoice ?? 0.00))
-            invoiceTotalLabelInfo.text = invoiceMessage
+
             
-            deductibleTotalLabelInfo.text = file?.deductible
-            
-        } else if Double(file?.coc ?? "") != nil {
-            let coc = Double(file?.coc ?? "")
-            let cocMessage = currencyFormatter.string(from: NSNumber(value: coc ?? 0.00))
-            cocTotalLabelInfo.text = cocMessage
-            invoiceTotalLabelInfo.text = file?.invoice
-            deductibleTotalLabelInfo.text = file?.deductible
         }
         else {
             cocTotalLabelInfo.text = ""
@@ -253,22 +245,24 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
         // this handles the out of pocket label
         outOfPocketLabelInfo.text = ""
         if file?.deductible == "" {
+            outOfPocketLabelInfo.text = ""
             outOfPocketLabel.text = "Enter a deductible to calulate the customer's out of pocket total."
         } else if file?.acvItemTotal == "0.0" || file?.acvItemTotal == "0" {
             let deductible = Double(file?.deductible ?? "")
             let deductibleMessage = currencyFormatter.string(from: NSNumber(value: deductible ?? 0.0))
-            outOfPocketLabel.text = "Your customer will owe their deductible when all insurance proceeds are paid."
+            outOfPocketLabelInfo.text = deductibleMessage
+            oopFlagMessage.text = "Your customer will owe their deductible when all insurance proceeds are paid."
         } else if file?.acvItemTotal != "" {
             let acv = Double(file?.acvItemTotal ?? "")
             let deductible = Double(file?.deductible ?? "")
             let oop = (deductible ?? 0.0) - (acv ?? 0.0)
-            
+            outOfPocketLabelInfo.text = currencyFormatter.string(from: NSNumber(value: oop))
             let oopMessage = currencyFormatter.string(from: NSNumber(value: abs(oop)))
             if oop < 0.0 {
-                outOfPocketLabel.text = "🎉 Your customer will get \(oopMessage ?? "_") back when all insurance proceeds are paid."
-                outOfPocketLabel.textColor = .systemGreen
+                oopFlagMessage.text = "🎉 Your customer will get \(oopMessage ?? "_") back when all insurance proceeds are paid."
+                oopFlagMessage.textColor = .systemGreen
             } else if oop > 0 {
-                outOfPocketLabel.text = "Your customer will owe \(oopMessage ?? "_") after all insurance proceeds are paid."
+                oopFlagMessage.text = "Your customer will owe \(oopMessage ?? "_") after all insurance proceeds are paid."
             }
             
         }
@@ -285,9 +279,8 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
             creditLabelInfo.text = creditMessage
             creditLabelInfo.textColor = UIColor.lightRed
             creditLabel.textColor = UIColor.lightRed
-            invoiceTotalLabel.text = "Invoice Total (Invoice - Credit)"
+            invoiceTotalLabel.text = "Invoice Total (COC - Credit)"
         }
-        print("hasCredit: ", hasCredit)
         
         
         noteLabelInfo.text = file?.note
@@ -617,6 +610,17 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
     }()
     
     
+    let outOfPocketLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Out of Pocket"
+        // label.backgroundColor = .red
+        // enable autolayout
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        label.textColor = .white
+        return label
+    }()
+    
     // create file deductible total entry
     let outOfPocketLabelInfo: UILabel = {
         let label = UILabel()
@@ -629,7 +633,7 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
         return label
     }()
     
-    let outOfPocketLabel: UILabel = {
+    let oopFlagMessage: UILabel = {
         let label = UILabel()
         label.text = ""
         // label.backgroundColor = .red
@@ -827,31 +831,36 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
 
 
         //outOfPocketLabel.heightAnchor.constraint(equalToConstant: 35).isActive = true
+        containerView.addSubview(outOfPocketLabel)
+        outOfPocketLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 16).isActive = true
+        outOfPocketLabel.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -16).isActive = true
+        outOfPocketLabel.topAnchor.constraint(equalTo: rcvTotalLabel.bottomAnchor).isActive = true
+        outOfPocketLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
 
-//        containerView.addSubview(outOfPocketLabelInfo)
-//        outOfPocketLabelInfo.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -16).isActive = true
-//        outOfPocketLabelInfo.bottomAnchor.constraint(equalTo: outOfPocketLabel.bottomAnchor).isActive = true
-//        outOfPocketLabelInfo.topAnchor.constraint(equalTo: outOfPocketLabel.topAnchor).isActive = true
+        containerView.addSubview(outOfPocketLabelInfo)
+        outOfPocketLabelInfo.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -16).isActive = true
+        outOfPocketLabelInfo.bottomAnchor.constraint(equalTo: outOfPocketLabel.bottomAnchor).isActive = true
+        outOfPocketLabelInfo.topAnchor.constraint(equalTo: outOfPocketLabel.topAnchor).isActive = true
+        
+        containerView.addSubview(oopFlagMessage)
+        oopFlagMessage.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 16).isActive = true
+        oopFlagMessage.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -16).isActive = true
+        oopFlagMessage.topAnchor.constraint(equalTo: outOfPocketLabel.bottomAnchor).isActive = true
+        oopFlagMessage.heightAnchor.constraint(equalToConstant: 40).isActive = true
 
         containerView.addSubview(creditLabel)
         creditLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 16).isActive = true
-        creditLabel.topAnchor.constraint(equalTo: rcvTotalLabelInfo.bottomAnchor).isActive = true
+        creditLabel.topAnchor.constraint(equalTo: oopFlagMessage.bottomAnchor).isActive = true
         creditLabel.heightAnchor.constraint(equalToConstant: 35).isActive = true
 
         containerView.addSubview(creditLabelInfo)
         creditLabelInfo.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -16).isActive = true
         creditLabelInfo.bottomAnchor.constraint(equalTo: creditLabel.bottomAnchor).isActive = true
         creditLabelInfo.topAnchor.constraint(equalTo: creditLabel.topAnchor).isActive = true
-        
-        containerView.addSubview(outOfPocketLabel)
-        outOfPocketLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 16).isActive = true
-        outOfPocketLabel.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -16).isActive = true
-        outOfPocketLabel.topAnchor.constraint(equalTo: creditLabel.bottomAnchor).isActive = true
-        outOfPocketLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
 
         containerView.addSubview(line)
         line.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -16).isActive = true
-        line.topAnchor.constraint(equalTo: outOfPocketLabel.bottomAnchor, constant: 10).isActive = true
+        line.topAnchor.constraint(equalTo: creditLabel.bottomAnchor, constant: 10).isActive = true
         line.heightAnchor.constraint(equalToConstant: 1).isActive = true
         line.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 16).isActive = true
 

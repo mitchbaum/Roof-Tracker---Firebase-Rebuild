@@ -13,11 +13,11 @@ extension ItemsController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let label = IndentedLabel()
         if section == 0 {
-            label.text = "Insurance Checks Recieved"
+            label.text = "Insurance Checks Received"
         } else if section == 1 {
-            label.text = "Insurance Checks Recieved and Paid"
+            label.text = "Insurance Checks Received & Collected"
         } else if section == 2 {
-            label.text = "Personal Checks Paid"
+            label.text = "Personal Checks Collected"
         } else if section == 3 {
             label.text = "ACV Owed to Homeowner"
         } else if section == 4 {
