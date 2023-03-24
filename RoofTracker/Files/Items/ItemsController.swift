@@ -253,17 +253,23 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
         // this handles the out of pocket label
         outOfPocketLabelInfo.text = ""
         if file?.deductible == "" {
-            outOfPocketLabelInfo.text = ""
+            outOfPocketLabel.text = "Enter a deductible to calulate the customer's out of pocket total."
         } else if file?.acvItemTotal == "0.0" || file?.acvItemTotal == "0" {
             let deductible = Double(file?.deductible ?? "")
             let deductibleMessage = currencyFormatter.string(from: NSNumber(value: deductible ?? 0.0))
-            outOfPocketLabelInfo.text = deductibleMessage
+            outOfPocketLabel.text = "Your customer will owe their deductible when all insurance proceeds are paid."
         } else if file?.acvItemTotal != "" {
             let acv = Double(file?.acvItemTotal ?? "")
             let deductible = Double(file?.deductible ?? "")
             let oop = (deductible ?? 0.0) - (acv ?? 0.0)
-            let oopMessage = currencyFormatter.string(from: NSNumber(value: oop))
-            outOfPocketLabelInfo.text = oopMessage
+            
+            let oopMessage = currencyFormatter.string(from: NSNumber(value: abs(oop)))
+            if oop < 0.0 {
+                outOfPocketLabel.text = "🎉 Your customer will get \(oopMessage ?? "_") back when all insurance proceeds are paid."
+                outOfPocketLabel.textColor = .systemGreen
+            } else if oop > 0 {
+                outOfPocketLabel.text = "Your customer will owe \(oopMessage ?? "_") after all insurance proceeds are paid."
+            }
             
         }
         
@@ -565,7 +571,7 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
     // create invoice balance total label
     let invoiceBalanceTotalLabel: UILabel = {
         let label = UILabel()
-        label.text = "Remaining Invoice - What's Due"
+        label.text = "Remaining Invoice \"What's Due\""
         // label.backgroundColor = .red
         // enable autolayout
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -610,17 +616,6 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
         return label
     }()
     
-    // create out of pocket label
-    let outOfPocketLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Out of Pocket"
-        // label.backgroundColor = .red
-        // enable autolayout
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-        label.textColor = .white
-        return label
-    }()
     
     // create file deductible total entry
     let outOfPocketLabelInfo: UILabel = {
@@ -631,6 +626,20 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont(name:"HelveticaNeue-Bold", size: 16)
         label.textColor = .white
+        return label
+    }()
+    
+    let outOfPocketLabel: UILabel = {
+        let label = UILabel()
+        label.text = ""
+        // label.backgroundColor = .red
+        // enable autolayout
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        label.textColor = .white
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.textAlignment = .center
         return label
     }()
     
@@ -816,29 +825,33 @@ class ItemsController: UITableViewController, createCheckControllerDelegate, cre
         rcvTotalLabelInfo.bottomAnchor.constraint(equalTo: rcvTotalLabel.bottomAnchor).isActive = true
         rcvTotalLabelInfo.topAnchor.constraint(equalTo: rcvTotalLabel.topAnchor).isActive = true
 
-        containerView.addSubview(outOfPocketLabel)
-        outOfPocketLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 16).isActive = true
-        outOfPocketLabel.topAnchor.constraint(equalTo: rcvTotalLabel.bottomAnchor).isActive = true
-        outOfPocketLabel.heightAnchor.constraint(equalToConstant: 35).isActive = true
 
-        containerView.addSubview(outOfPocketLabelInfo)
-        outOfPocketLabelInfo.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -16).isActive = true
-        outOfPocketLabelInfo.bottomAnchor.constraint(equalTo: outOfPocketLabel.bottomAnchor).isActive = true
-        outOfPocketLabelInfo.topAnchor.constraint(equalTo: outOfPocketLabel.topAnchor).isActive = true
+        //outOfPocketLabel.heightAnchor.constraint(equalToConstant: 35).isActive = true
+
+//        containerView.addSubview(outOfPocketLabelInfo)
+//        outOfPocketLabelInfo.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -16).isActive = true
+//        outOfPocketLabelInfo.bottomAnchor.constraint(equalTo: outOfPocketLabel.bottomAnchor).isActive = true
+//        outOfPocketLabelInfo.topAnchor.constraint(equalTo: outOfPocketLabel.topAnchor).isActive = true
 
         containerView.addSubview(creditLabel)
         creditLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 16).isActive = true
-        creditLabel.topAnchor.constraint(equalTo: outOfPocketLabel.bottomAnchor).isActive = true
+        creditLabel.topAnchor.constraint(equalTo: rcvTotalLabelInfo.bottomAnchor).isActive = true
         creditLabel.heightAnchor.constraint(equalToConstant: 35).isActive = true
 
         containerView.addSubview(creditLabelInfo)
         creditLabelInfo.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -16).isActive = true
         creditLabelInfo.bottomAnchor.constraint(equalTo: creditLabel.bottomAnchor).isActive = true
         creditLabelInfo.topAnchor.constraint(equalTo: creditLabel.topAnchor).isActive = true
+        
+        containerView.addSubview(outOfPocketLabel)
+        outOfPocketLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 16).isActive = true
+        outOfPocketLabel.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -16).isActive = true
+        outOfPocketLabel.topAnchor.constraint(equalTo: creditLabel.bottomAnchor).isActive = true
+        outOfPocketLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
 
         containerView.addSubview(line)
         line.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -16).isActive = true
-        line.topAnchor.constraint(equalTo: creditLabel.bottomAnchor, constant: 10).isActive = true
+        line.topAnchor.constraint(equalTo: outOfPocketLabel.bottomAnchor, constant: 10).isActive = true
         line.heightAnchor.constraint(equalToConstant: 1).isActive = true
         line.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 16).isActive = true
 

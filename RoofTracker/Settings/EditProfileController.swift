@@ -25,11 +25,7 @@ class EditProfileController: UIViewController, UIImagePickerControllerDelegate, 
 
     
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-    }
-    
+
     override func viewDidLoad() {
         print("here")
         super.viewDidLoad()

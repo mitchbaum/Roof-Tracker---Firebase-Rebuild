@@ -226,17 +226,17 @@ class CreateFileController: UIViewController, UIImagePickerControllerDelegate, U
             print("setting missingFundsSwitch to \(String(missingFundsSwitch.isOn)) in db")
             if (missingFundsSwitch.isOn && file?.missingFunds == nil) {
                 print("saving missing funds")
-                if let coc = Double(file?.coc ?? ""), let insCheckACVTotal = Double(file?.insCheckACVTotal ?? ""), let deducible = Double(file?.deductible ?? "") {
+                if let coc = Double(file?.coc ?? "0.0"), let insCheckACVTotal = Double(file?.insCheckACVTotal ?? "0.0"), let deducible = Double(file?.deductible ?? "0.0") {
+                    print("oin here")
                     let missingFunds = coc + insCheckACVTotal - deducible
                   self.db.collection("Users").document(uid).collection("Files").document(self.thisFileId).updateData(["missingFunds" : missingFunds])
                     updateUserTotalMissingFunds(missingFunds: missingFunds, fileId: self.thisFileId, fileName: file?.name ?? "")
                 }
-                
             }
         }
         
         
-        
+        print("down here")
         // reset time stamp
         let timeStamp = "\(DateFormatter.localizedString(from: Date(), dateStyle: .long, timeStyle: .long))"
         self.db.collection("Users").document(uid).collection("Files").document(self.thisFileId).updateData(["timeStamp" : timeStamp, "modified" : FieldValue.serverTimestamp()])
@@ -288,6 +288,7 @@ class CreateFileController: UIViewController, UIImagePickerControllerDelegate, U
     }
     
     private func updateUserTotalMissingFunds(missingFunds: Double, fileId: String, fileName: String) {
+        print("updateUserTotalMissingFunds")
         var currentUserMissingFundsTotal = 0.0
         guard let uid = Auth.auth().currentUser?.uid else { return }
         db.collection("Users").document(uid).getDocument(completion: { snapshot, error in
@@ -302,9 +303,9 @@ class CreateFileController: UIViewController, UIImagePickerControllerDelegate, U
                         currentUserMissingFundsTotal = missingFundsTotal!
                     }
                     self.db.collection("Users").document(uid).updateData(["missingFundsTotal" : currentUserMissingFundsTotal + missingFunds])
-                    
+                    let missingFundsId = self.db.collection("Users").document(uid).collection("MissingFundsLog").document().documentID
                     if companyId != "" {
-                        self.db.collection("Companies").document(companyId!).collection("MissingFundsLog").document().setData(["timeStamp" : FieldValue.serverTimestamp(), "fileId" :fileId, "fileName": fileName, "missingFunds" : missingFunds, "ownerId": uid])
+                        self.db.collection("Companies").document(companyId!).collection("MissingFundsLog").document(missingFundsId).setData(["timeStamp" : FieldValue.serverTimestamp(), "fileId" :fileId, "fileName": fileName, "missingFunds" : missingFunds, "ownerId": uid, "id": missingFundsId])
                         self.updateCompanyTotalMissingFunds(missingFunds: missingFunds, companyId: companyId!)
                     }
                 }
@@ -425,10 +426,19 @@ class CreateFileController: UIViewController, UIImagePickerControllerDelegate, U
             currencyFormatter.usesGroupingSeparator = true
             currencyFormatter.numberStyle = .currency
             currencyFormatter.locale = Locale.current
-            if let coc = Double(file?.coc ?? ""), let insCheckACVTotal = Double(file?.insCheckACVTotal ?? ""), let deducible = Double(file?.deductible ?? "") {
+            if let coc = Double(file?.coc ?? "0.0"), let insCheckACVTotal = Double(file?.insCheckACVTotal ?? "0.0"), let deducible = Double(file?.deductible ?? "0.0") {
                 let missingFunds = coc + insCheckACVTotal - deducible
                 let currencyFormat = currencyFormatter.string(from: NSNumber(value: missingFunds )) ?? ""
+                if missingFunds < 0 {
+                    showError(title: "Verify Missing Funds", message: "Cannot declare negative values as missing.\nFound: " + currencyFormat)
+                    missingFundsSwitch.isOn = false
+                    return
+                }
+                
                 confirmMissingFunds(title: "Verify Missing Funds", message: "Is this the correct amount missing that will be pursued to collect?\n\n Insurance Still Owes Homeowner:\n" + currencyFormat)
+            } else {
+                showError(title: "Verify Missing Funds", message: "No ACV or Insurance Checks detected. Could not calculate missing funds.")
+                missingFundsSwitch.isOn = false
             }
         }
         // Do something

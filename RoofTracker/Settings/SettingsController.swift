@@ -11,7 +11,7 @@ import Firebase
 import FirebaseStorage
 import JGProgressHUD
 
-class SettingsController: UIViewController, editProfileControllerDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
+class SettingsController: UIViewController, editProfileControllerDelegate, MissingFundsControllerDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
     
     let db = Firestore.firestore()
     
@@ -45,6 +45,35 @@ class SettingsController: UIViewController, editProfileControllerDelegate, UIPic
         setupUI()
         
 
+    }
+
+    
+    
+    func refreshMissingFunds() {
+        print("refreshMissingFunds")
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        db.collection("Users").document(uid).getDocument(completion: { snapshot, error in
+            if let err = error {
+                debugPrint("Error fetching profile: \(err)")
+            } else {
+                if let data = snapshot?.data() {
+                    let missingFundsTotal = data["missingFundsTotal"] as? Double ?? nil
+                    if missingFundsTotal != nil {
+                        let currencyFormatter = NumberFormatter()
+                        currencyFormatter.usesGroupingSeparator = true
+                        currencyFormatter.numberStyle = .currency
+                        currencyFormatter.locale = Locale.current
+                        let currencyFormat = currencyFormatter.string(from: NSNumber(value: missingFundsTotal! ))
+                        self.missingFundsView.setTitle("\(currencyFormat ?? "$0.00") In Missing Funds Found", for: .normal)
+                        
+                    } else {
+                        self.missingFundsView.setTitle("$0.00 In Missing Funds Found", for: .normal)
+
+                    }
+                    
+                }
+            }
+        })
     }
 
     
@@ -210,6 +239,15 @@ class SettingsController: UIViewController, editProfileControllerDelegate, UIPic
         
     }
     
+    @objc func handleMissingFunds(sender: UIButton) {
+        print("opening missing funds")
+        let missingFundsController = MissingFundsController()
+        missingFundsController.delegate = self
+        let navController = CustomNavigationController(rootViewController: missingFundsController)
+        self.present(navController, animated: true, completion: nil)
+        
+    }
+    
     lazy var userImageView: UIImageView = {
         let imageView = UIImageView(image: #imageLiteral(resourceName: "username_icon_white"))
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -302,6 +340,32 @@ class SettingsController: UIViewController, editProfileControllerDelegate, UIPic
         return label
     }()
     
+    let manageMissingFundsLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Manage Missing\nFunds"
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+        label.textColor = .black
+        label.textAlignment = .center
+        // enable autolayout
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    // create button for log in
+    let manageMissingFundsButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = UIColor.lightRed
+//        button.layer.borderColor = UIColor.beerOrange.cgColor
+//        button.layer.borderWidth = 2
+        button.setImage(UIImage(systemName: "dollarsign", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30, weight: .bold, scale: .large))?.withTintColor(.white, renderingMode: .alwaysOriginal), for: .normal)
+        button.layer.cornerRadius = 10
+        button.addTarget(self, action: #selector(handleMissingFunds(sender:)), for: .touchUpInside)
+        // enable autolayout
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     let signOutLabel: UILabel = {
         let label = UILabel()
         label.text = "Sign Out"
@@ -317,11 +381,10 @@ class SettingsController: UIViewController, editProfileControllerDelegate, UIPic
         button.backgroundColor = UIColor.lightRed
 //        button.layer.borderColor = UIColor.beerOrange.cgColor
 //        button.layer.borderWidth = 2
-        button.setTitle("➦", for: .normal)
+        //button.setTitle("➦", for: .normal)
         button.layer.cornerRadius = 10
-        button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(handleSignOut(sender:)), for: .touchUpInside)
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 40.0)
+        button.setImage(UIImage(systemName: "rectangle.portrait.and.arrow.forward", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30, weight: .regular, scale: .large))?.withTintColor(.white, renderingMode: .alwaysOriginal), for: .normal)
         // enable autolayout
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -332,6 +395,7 @@ class SettingsController: UIViewController, editProfileControllerDelegate, UIPic
         button.layer.borderColor = UIColor.lightRed.cgColor
         button.layer.borderWidth = 1
         button.layer.cornerRadius = 10
+        button.setTitleColor(.lightRed, for: .normal)
         button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         button.isUserInteractionEnabled = false
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -355,10 +419,9 @@ class SettingsController: UIViewController, editProfileControllerDelegate, UIPic
         button.layer.borderColor = UIColor.lightRed.cgColor
         button.layer.borderWidth = 1.5
         button.layer.cornerRadius = 10
-        button.setTitle("↺", for: .normal)
-        button.setTitleColor(.lightRed, for: .normal)
+//        button.setTitle("↺", for: .normal)
+        button.setImage(UIImage(systemName: "lock.rotation", withConfiguration: UIImage.SymbolConfiguration(pointSize: 33, weight: .regular, scale: .large))?.withTintColor(.lightRed, renderingMode: .alwaysOriginal), for: .normal)
         button.addTarget(self, action: #selector(handleForgotPassword(sender:)), for: .touchUpInside)
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 40.0)
         // enable autolayout
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -456,12 +519,21 @@ class SettingsController: UIViewController, editProfileControllerDelegate, UIPic
         missingFundsView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 20).isActive = true
         missingFundsView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -20).isActive = true
         
+        view.addSubview(manageMissingFundsButton)
+        manageMissingFundsButton.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        manageMissingFundsButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        manageMissingFundsButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor, constant: -71).isActive = true
+        manageMissingFundsButton.topAnchor.constraint(equalTo: missingFundsView.bottomAnchor, constant: 30).isActive = true
+        
+        view.addSubview(manageMissingFundsLabel)
+        manageMissingFundsLabel.centerXAnchor.constraint(equalTo: manageMissingFundsButton.centerXAnchor).isActive = true
+        manageMissingFundsLabel.topAnchor.constraint(equalTo: manageMissingFundsButton.bottomAnchor, constant: 6).isActive = true
         
         view.addSubview(signoutButton)
         signoutButton.heightAnchor.constraint(equalToConstant: 100).isActive = true
         signoutButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
         signoutButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor, constant: -71).isActive = true
-        signoutButton.topAnchor.constraint(equalTo: missingFundsView.bottomAnchor, constant: 30).isActive = true
+        signoutButton.topAnchor.constraint(equalTo: manageMissingFundsButton.bottomAnchor, constant: 60).isActive = true
         
         view.addSubview(signOutLabel)
         signOutLabel.centerXAnchor.constraint(equalTo: signoutButton.centerXAnchor).isActive = true

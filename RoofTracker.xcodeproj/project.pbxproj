@@ -25,6 +25,10 @@
 		800E963A25EF3CDE005FB32C /* CreateCheckController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800E963925EF3CDE005FB32C /* CreateCheckController.swift */; };
 		801BF66A2842EEF9003382A6 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 801BF6692842EEF9003382A6 /* Launch Screen.storyboard */; };
 		805E18D828DCEC9B005AB666 /* CreateUserController+UIPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805E18D728DCEC9B005AB666 /* CreateUserController+UIPickerView.swift */; };
+		807F78FE29CBE95000D0FC3D /* MissingFundsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807F78FD29CBE94F00D0FC3D /* MissingFundsController.swift */; };
+		807F790029CBE96C00D0FC3D /* MissingFundsController+UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807F78FF29CBE96C00D0FC3D /* MissingFundsController+UITableView.swift */; };
+		807F790229CBE97C00D0FC3D /* MissingFundsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807F790129CBE97C00D0FC3D /* MissingFundsModel.swift */; };
+		807F790429CCF04C00D0FC3D /* MIssingFundsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807F790329CCF04C00D0FC3D /* MIssingFundsCell.swift */; };
 		8090EFCA286C786B00A8D0A2 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8090EFC9286C786A00A8D0A2 /* Reachability.swift */; };
 		8090EFCC286C8C2B00A8D0A2 /* EditProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8090EFCB286C8C2B00A8D0A2 /* EditProfileController.swift */; };
 		8090EFCE286CB17700A8D0A2 /* SettingsController+UIPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8090EFCD286CB17700A8D0A2 /* SettingsController+UIPickerView.swift */; };
@@ -108,6 +112,10 @@
 		800E963925EF3CDE005FB32C /* CreateCheckController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCheckController.swift; sourceTree = "<group>"; };
 		801BF6692842EEF9003382A6 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		805E18D728DCEC9B005AB666 /* CreateUserController+UIPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CreateUserController+UIPickerView.swift"; sourceTree = "<group>"; };
+		807F78FD29CBE94F00D0FC3D /* MissingFundsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingFundsController.swift; sourceTree = "<group>"; };
+		807F78FF29CBE96C00D0FC3D /* MissingFundsController+UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MissingFundsController+UITableView.swift"; sourceTree = "<group>"; };
+		807F790129CBE97C00D0FC3D /* MissingFundsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingFundsModel.swift; sourceTree = "<group>"; };
+		807F790329CCF04C00D0FC3D /* MIssingFundsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIssingFundsCell.swift; sourceTree = "<group>"; };
 		8090EFC9286C786A00A8D0A2 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		8090EFCB286C8C2B00A8D0A2 /* EditProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileController.swift; sourceTree = "<group>"; };
 		8090EFCD286CB17700A8D0A2 /* SettingsController+UIPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsController+UIPickerView.swift"; sourceTree = "<group>"; };
@@ -264,6 +272,17 @@
 			path = Files;
 			sourceTree = "<group>";
 		};
+		807F78FC29CBE92900D0FC3D /* MissingFunds */ = {
+			isa = PBXGroup;
+			children = (
+				807F78FD29CBE94F00D0FC3D /* MissingFundsController.swift */,
+				807F78FF29CBE96C00D0FC3D /* MissingFundsController+UITableView.swift */,
+				807F790129CBE97C00D0FC3D /* MissingFundsModel.swift */,
+				807F790329CCF04C00D0FC3D /* MIssingFundsCell.swift */,
+			);
+			path = MissingFunds;
+			sourceTree = "<group>";
+		};
 		809BCF2E2837058500C326B6 /* Sign In */ = {
 			isa = PBXGroup;
 			children = (
@@ -286,6 +305,7 @@
 		809BCF3A2838375100C326B6 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				807F78FC29CBE92900D0FC3D /* MissingFunds */,
 				809BCF3B2838376B00C326B6 /* SettingsController.swift */,
 				8090EFCD286CB17700A8D0A2 /* SettingsController+UIPickerView.swift */,
 				8090EFCB286C8C2B00A8D0A2 /* EditProfileController.swift */,
@@ -631,6 +651,7 @@
 				80DCB06D25FEC3D00036A290 /* CheckTableViewCell.swift in Sources */,
 				800E95B525EC2EED005FB32C /* TrainingModels.xcdatamodeld in Sources */,
 				80F7CA1F29C7624500957383 /* TeamModel.swift in Sources */,
+				807F78FE29CBE95000D0FC3D /* MissingFundsController.swift in Sources */,
 				800E963025EF3544005FB32C /* FilesController+UITableView.swift in Sources */,
 				809BCF39283820DD00C326B6 /* ForgotPasswordController.swift in Sources */,
 				80F7CA2929C7994100957383 /* TeamFileDetailsController.swift in Sources */,
@@ -651,6 +672,7 @@
 				800E963A25EF3CDE005FB32C /* CreateCheckController.swift in Sources */,
 				8090EFCE286CB17700A8D0A2 /* SettingsController+UIPickerView.swift in Sources */,
 				800E963525EF3A1E005FB32C /* ItemsController.swift in Sources */,
+				807F790429CCF04C00D0FC3D /* MIssingFundsCell.swift in Sources */,
 				80DCB0902618C0680036A290 /* InsuranceCheckCell.swift in Sources */,
 				80F7CA2B29C7995800957383 /* TeamFileDetailsController+UITableView.swift in Sources */,
 				805E18D828DCEC9B005AB666 /* CreateUserController+UIPickerView.swift in Sources */,
@@ -664,9 +686,11 @@
 				800E95AE25EAC0FA005FB32C /* CreateFileController.swift in Sources */,
 				8090EFCC286C8C2B00A8D0A2 /* EditProfileController.swift in Sources */,
 				809BCF3E2839811C00C326B6 /* FileModel.swift in Sources */,
+				807F790029CBE96C00D0FC3D /* MissingFundsController+UITableView.swift in Sources */,
 				80DE841329C11DEA006BD05C /* CreateCheckController+UIPickerView.swift in Sources */,
 				809BCF352838204A00C326B6 /* Utilities.swift in Sources */,
 				809BCF3C2838376B00C326B6 /* SettingsController.swift in Sources */,
+				807F790229CBE97C00D0FC3D /* MissingFundsModel.swift in Sources */,
 				800E962B25EF34C8005FB32C /* FilesController+CreateFile.swift in Sources */,
 				809BCF372838208900C326B6 /* CreateUserController.swift in Sources */,
 			);
@@ -848,7 +872,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.8;
+				MARKETING_VERSION = 2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mitchbaumgartner.RoofTrackerFirebase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -874,7 +898,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.8;
+				MARKETING_VERSION = 2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mitchbaumgartner.RoofTrackerFirebase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

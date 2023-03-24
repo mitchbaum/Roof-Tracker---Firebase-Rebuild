@@ -78,7 +78,6 @@ class FileCell: UITableViewCell {
             }
 
             if let missingFunds =  file?.missingFundsSwitch {
-                print("fileCell \(file!.name) missingfundsswitch = ", missingFunds)
                 if missingFunds == true {
 //                    missingFundsLabel.layer.backgroundColor = UIColor.lightRed.cgColor
 //                    missingFundsLabel.contentEdgeInsets = UIEdgeInsets(top: 3, left: 10, bottom: 3, right: 10)
