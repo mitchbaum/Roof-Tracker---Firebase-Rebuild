@@ -104,8 +104,8 @@ class TeamFileDetailsController: UITableViewController {
             // invoice and coc are the same unless there's credit applied
             invoiceTotalLabelInfo.text = ""
             if file?.coc != "" {
-                let invoice = Double(file?.coc ?? "")
-                let invoiceMessage = currencyFormatter.string(from: NSNumber(value: invoice ?? 0.00))
+                let coc = Double(file?.coc ?? "")
+                let invoiceMessage = currencyFormatter.string(from: NSNumber(value: coc ?? 0.00))
                 invoiceTotalLabelInfo.text = invoiceMessage
             }
             
@@ -123,8 +123,7 @@ class TeamFileDetailsController: UITableViewController {
                 let cocMessage = currencyFormatter.string(from: NSNumber(value: coc ?? 0.00))
                 cocTotalLabelInfo.text = cocMessage
                 // set invoice label
-                let invoice = Double(file?.coc ?? "")
-                let invoiceMessage = currencyFormatter.string(from: NSNumber(value: invoice ?? 0.00))
+                let invoiceMessage = currencyFormatter.string(from: NSNumber(value: coc ?? 0.00))
                 invoiceTotalLabelInfo.text = invoiceMessage
                 deductibleTotalLabelInfo.text = file?.deductible
             }

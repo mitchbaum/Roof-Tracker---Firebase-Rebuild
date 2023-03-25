@@ -52,12 +52,6 @@ class CreateFileController: UIViewController, UIImagePickerControllerDelegate, U
                 cocTextField.text = cocFormat
             }
             
-            invoiceTextField.text = file?.invoice
-            if file?.invoice != "" {
-                let invoice = Double(file?.invoice ?? "")
-                let invoiceFormat = currencyFormatter.string(from: NSNumber(value: invoice ?? 0.0))
-                invoiceTextField.text = invoiceFormat
-            }
             
             deductibleTextField.text = file?.deductible
             if file?.deductible != "" {
@@ -190,21 +184,6 @@ class CreateFileController: UIViewController, UIImagePickerControllerDelegate, U
             self.db.collection("Users").document(uid).collection("Files").document(self.thisFileId).updateData(["coc" : coc ?? ""])
         }
         
-        let invoice = invoiceTextField.text
-        // if user enters something in the invoice textfield, start this if statement block
-        if invoice != "" {
-            let invoiceDouble = invoice?.toDoubleWithAutoLocale()
-            // if user enters invalid entry for a invoice value (commas and decimals) error message
-            if invoiceDouble == nil {
-                return showError(title: "Invalid Invoice Entry", message: "Double check your Invoice entry.")
-            }
-            //file?.invoice = "\(invoiceDouble ?? 0.0)"
-            self.db.collection("Users").document(uid).collection("Files").document(self.thisFileId).updateData(["invoice" : "\(invoiceDouble ?? 0.0)"])
-        } else { // if user decides to remove a invoice entry, the save will clear the textfield to empty
-            //file?.invoice = invoice
-            self.db.collection("Users").document(uid).collection("Files").document(self.thisFileId).updateData(["invoice" : invoice ?? ""])
-            
-        }
         
         let deductible = deductibleTextField.text
         // if user enters something in the deductible textfield, start this if statement block
@@ -339,7 +318,6 @@ class CreateFileController: UIViewController, UIImagePickerControllerDelegate, U
         print("saving file in Firebase")
         let name = nameTextField.text ?? ""
         let coc = cocTextField.text ?? ""
-        let invoice = invoiceTextField.text ?? ""
         let deductible = deductibleTextField.text ?? ""
         let note = notesTextField.text ?? ""
         let timeStamp = "\(DateFormatter.localizedString(from: Date(), dateStyle: .long, timeStyle: .long))"
@@ -354,7 +332,6 @@ class CreateFileController: UIViewController, UIImagePickerControllerDelegate, U
                                                                                             "id" : fileId,
                                                                                             "name" : name,
                                                                                             "coc" : coc,
-                                                                                            "invoice" : invoice,
                                                                                             "deductible" : deductible,
                                                                                             "timeStamp" : timeStamp,
                                                                                             "modified" : FieldValue.serverTimestamp(),
@@ -591,41 +568,7 @@ class CreateFileController: UIViewController, UIImagePickerControllerDelegate, U
         textField.keyboardType = UIKeyboardType.decimalPad
         return textField
     }()
-    // create invoice total label
-    let invoiceLabel: UILabel = {
-        let label = UILabel()
-        label.text = "INVOICE TOTAL"
-        label.font = UIFont.systemFont(ofSize: 13, weight: .medium)
-        label.textColor = .black
-        // enable autolayout
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
     
-    // create COC total label
-    let invoice$: UILabel = {
-        let label = UILabel()
-        label.text = "$"
-        label.textColor = .black
-        // enable autolayout
-        label.translatesAutoresizingMaskIntoConstraints = false
-        
-        return label
-    }()
-    
-    // create text field for coc entry
-    let invoiceTextField: UITextField = {
-        let textField = UITextField()
-        textField.attributedPlaceholder = NSAttributedString(string: "Enter invoice",
-                                     attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-        textField.textColor = .darkGray
-        textField.addLine(position: .bottom, color: .lightRed, width: 1)
-        textField.setLeftPaddingPoints(17)
-        // enable autolayout, without this constraints wont load properly
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.keyboardType = UIKeyboardType.decimalPad
-        return textField
-    }()
     // create deductible total label
     let deductibleLabel: UILabel = {
         let label = UILabel()
@@ -851,28 +794,11 @@ class CreateFileController: UIViewController, UIImagePickerControllerDelegate, U
         //cocTextField.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -32).isActive = true
         cocTextField.topAnchor.constraint(equalTo: cocLabel.bottomAnchor).isActive = true
         cocTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        cocTextField.widthAnchor.constraint(equalToConstant: 150).isActive = true
-        
-        // add and position invoice label
-        view.addSubview(invoiceLabel)
-        invoiceLabel.topAnchor.constraint(equalTo: deductibleTextField.bottomAnchor, constant: 20).isActive = true
-        invoiceLabel.leftAnchor.constraint(equalTo: cocLabel.rightAnchor, constant: 16).isActive = true
-        
-        view.addSubview(invoice$)
-        invoice$.topAnchor.constraint(equalTo: invoiceLabel.bottomAnchor).isActive = true
-        invoice$.leftAnchor.constraint(equalTo: cocTextField.rightAnchor, constant: 16).isActive = true
-        invoice$.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        invoice$.widthAnchor.constraint(equalToConstant: 15).isActive = true
-        
-        // add and position invoice textfield element to the right of the nameLabel
-        view.addSubview(invoiceTextField)
-        invoiceTextField.leftAnchor.constraint(equalTo: cocTextField.rightAnchor, constant: 16).isActive = true
-        invoiceTextField.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -32).isActive = true
-        invoiceTextField.topAnchor.constraint(equalTo: invoiceLabel.bottomAnchor).isActive = true
-        invoiceTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        cocTextField.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -32).isActive = true
+
         
         view.addSubview(notesLabel)
-        notesLabel.topAnchor.constraint(equalTo: invoiceTextField.bottomAnchor, constant: 20).isActive = true
+        notesLabel.topAnchor.constraint(equalTo: cocTextField.bottomAnchor, constant: 20).isActive = true
         notesLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 32).isActive = true
         
         // add and position item price textfield element to the right of the itemPriceLabel

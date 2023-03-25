@@ -14,7 +14,6 @@ struct FB_File: Equatable {
     var deductible: String?
     var cocSwitch: Bool?
     var imageData: String?
-    var invoice: String?
     var timeStamp: String?
     var modified: Date?
     var type: String?

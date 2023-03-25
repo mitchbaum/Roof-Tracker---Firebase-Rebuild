@@ -181,7 +181,6 @@ class FilesController: UITableViewController, UISearchBarDelegate, UISearchResul
                     let cocSwitch = data["cocSwitch"] as? Bool ?? false
                     let deductible = data["deductible"] as? String ?? ""
                     let imageData = data["imageData"] as? String ?? ""
-                    let invoice = data["invoice"] as? String ?? ""
                     let timeStamp = data["timeStamp"] as? String ?? ""
                     let modified = data["modified"] as? Date ?? nil
                     let type = data["type"] as? String ?? ""
@@ -197,7 +196,7 @@ class FilesController: UITableViewController, UISearchBarDelegate, UISearchResul
                     let missingFunds = data["missingFunds"] as? Double ?? nil
                     let missingFundsSwitch = data["missingFundsSwitch"] as? Bool ?? false
                      
-                    let newFile = FB_File(name: name, coc: coc, deductible: deductible, cocSwitch: cocSwitch, imageData: imageData, invoice: invoice, timeStamp: timeStamp, modified: modified, type: type, insCheckACVTotal: insCheckACVTotal, id: id, acvItemTotal: acvItemTotal, cashItemTotal: cashItemTotal, insCheckTotal: insCheckTotal, pymtCheckTotal: pymtCheckTotal, rcvItemTotal: rcvItemTotal, note: note, creditItemTotal: creditItemTotal, missingFunds: missingFunds, missingFundsSwitch: missingFundsSwitch)
+                    let newFile = FB_File(name: name, coc: coc, deductible: deductible, cocSwitch: cocSwitch, imageData: imageData, timeStamp: timeStamp, modified: modified, type: type, insCheckACVTotal: insCheckACVTotal, id: id, acvItemTotal: acvItemTotal, cashItemTotal: cashItemTotal, insCheckTotal: insCheckTotal, pymtCheckTotal: pymtCheckTotal, rcvItemTotal: rcvItemTotal, note: note, creditItemTotal: creditItemTotal, missingFunds: missingFunds, missingFundsSwitch: missingFundsSwitch)
                     self.files.append(newFile)
                     
 
