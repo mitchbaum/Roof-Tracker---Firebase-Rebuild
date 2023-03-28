@@ -13,6 +13,7 @@ import SwiftUI
 import LBTATools
 import JGProgressHUD
 import CoreData
+import Updates
 
 
 // controller name should reflect what it is presenting
@@ -34,11 +35,21 @@ class FilesController: UITableViewController, UISearchBarDelegate, UISearchResul
     var filesCollectionRef: CollectionReference!
     let db = Firestore.firestore()
     
-
-    
     // this function will refresh the viewController when user goes back from the file summary controller, refreshing the cell to reflect the most accurate ins still owes HO
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        // check for updates
+        let identifier = Bundle.main.infoDictionary!["CFBundleIdentifier"] as? String ?? ""
+        Updates.configurationURL = URL(string: "https://itunes.apple.com/lookup?bundleId=\(identifier)")
+        Updates.updatingMode = .automatically
+        Updates.notifying = .always
+        Updates.appStoreId = "1626674643"
+        Updates.checkForUpdates { result in
+            guard case .available(_) = result else { return }
+            let outOfDateController = OutOfDateController()
+            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(outOfDateController)
+            UpdatesUI.promptToUpdate(result, presentingViewController: outOfDateController)
+        }
         // check for internet connection, if there is none show an error
         reachability.whenReachable = { reachability in
             if reachability.connection == .wifi {
@@ -79,6 +90,8 @@ class FilesController: UITableViewController, UISearchBarDelegate, UISearchResul
         let attributes = [NSAttributedString.Key.font : font]
         settings.setTitleTextAttributes(attributes, for: .normal)
         navigationItem.leftBarButtonItems = [settings]
+        let nsObject: String? = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String
+        print("app build version: " + nsObject!)
     
         
         // nav item for Reset all button in top left corner

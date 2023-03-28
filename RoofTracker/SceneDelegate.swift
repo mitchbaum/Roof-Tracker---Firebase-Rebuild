@@ -8,7 +8,6 @@ import FirebaseAuth
 import Firebase
 import SwiftUI
 
-
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
@@ -16,16 +15,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
-//        // Use a UIHostingController as window root view controller.
-//        if let windowScene = scene as? UIWindowScene {
-//            let window = UIWindow(windowScene: windowScene)
-//            
-//            let filesController = FilesController()
-//            let navController = CustomNavigationController(rootViewController: filesController)
-//            window.rootViewController = navController
-//            
-//            self.window = window
-//            window.makeKeyAndVisible()
+//        let nsObject: String? = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String
+//        if nsObject != "2.2.3" {
+//            return
 //        }
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
@@ -54,6 +46,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             return self.signInVC()
         }
         
+        
+    }
+    func appOutOfDate() {
         
     }
     

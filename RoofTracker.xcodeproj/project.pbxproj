@@ -32,6 +32,7 @@
 		8090EFCA286C786B00A8D0A2 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8090EFC9286C786A00A8D0A2 /* Reachability.swift */; };
 		8090EFCC286C8C2B00A8D0A2 /* EditProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8090EFCB286C8C2B00A8D0A2 /* EditProfileController.swift */; };
 		8090EFCE286CB17700A8D0A2 /* SettingsController+UIPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8090EFCD286CB17700A8D0A2 /* SettingsController+UIPickerView.swift */; };
+		8098FEAF29D3842600133BE6 /* OutOfDateController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8098FEAE29D3842500133BE6 /* OutOfDateController.swift */; };
 		809BCF3028381FC800C326B6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 809BCF2F28381FC800C326B6 /* GoogleService-Info.plist */; };
 		809BCF352838204A00C326B6 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809BCF342838204A00C326B6 /* Utilities.swift */; };
 		809BCF372838208900C326B6 /* CreateUserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809BCF362838208900C326B6 /* CreateUserController.swift */; };
@@ -119,6 +120,7 @@
 		8090EFC9286C786A00A8D0A2 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		8090EFCB286C8C2B00A8D0A2 /* EditProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileController.swift; sourceTree = "<group>"; };
 		8090EFCD286CB17700A8D0A2 /* SettingsController+UIPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsController+UIPickerView.swift"; sourceTree = "<group>"; };
+		8098FEAE29D3842500133BE6 /* OutOfDateController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutOfDateController.swift; sourceTree = "<group>"; };
 		809BCF2F28381FC800C326B6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		809BCF342838204A00C326B6 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		809BCF362838208900C326B6 /* CreateUserController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateUserController.swift; sourceTree = "<group>"; };
@@ -228,6 +230,7 @@
 				800E956C25EAAD4B005FB32C /* AppDelegate.swift */,
 				8090EFC9286C786A00A8D0A2 /* Reachability.swift */,
 				800E956E25EAAD4B005FB32C /* SceneDelegate.swift */,
+				8098FEAE29D3842500133BE6 /* OutOfDateController.swift */,
 				800E957225EAAD4B005FB32C /* Main.storyboard */,
 				800E957525EAAD51005FB32C /* Assets.xcassets */,
 				801BF6692842EEF9003382A6 /* Launch Screen.storyboard */,
@@ -657,6 +660,7 @@
 				80F7CA2929C7994100957383 /* TeamFileDetailsController.swift in Sources */,
 				80F7CA1929C6660800957383 /* TeamController.swift in Sources */,
 				80F7CA2429C78F4C00957383 /* TeamMemberController.swift in Sources */,
+				8098FEAF29D3842600133BE6 /* OutOfDateController.swift in Sources */,
 				809BCF40283BE42800C326B6 /* ItemsController+UITableView.swift in Sources */,
 				800E957125EAAD4B005FB32C /* FilesController.swift in Sources */,
 				80F7CA1B29C6827000957383 /* SignInController.swift in Sources */,
@@ -872,7 +876,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2;
+				MARKETING_VERSION = 2.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mitchbaumgartner.RoofTrackerFirebase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -898,7 +902,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2;
+				MARKETING_VERSION = 2.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mitchbaumgartner.RoofTrackerFirebase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

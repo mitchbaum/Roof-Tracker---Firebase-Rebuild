@@ -407,7 +407,12 @@ class CreateFileController: UIViewController, UIImagePickerControllerDelegate, U
                 let missingFunds = coc + insCheckACVTotal - deducible
                 let currencyFormat = currencyFormatter.string(from: NSNumber(value: missingFunds )) ?? ""
                 if missingFunds < 0 {
-                    showError(title: "Verify Missing Funds", message: "Cannot declare negative values as missing.\nFound: " + currencyFormat)
+                    showError(title: "Verify Missing Funds", message: "Cannot declare negative amounts as missing.\n\n Insurance Still Owes Homeowner:\n" + currencyFormat)
+                    missingFundsSwitch.isOn = false
+                    return
+                }
+                if missingFunds == 0 {
+                    showError(title: "Verify Missing Funds", message: "No missing funds found.\n\n Insurance Still Owes Homeowner:\n" + currencyFormat)
                     missingFundsSwitch.isOn = false
                     return
                 }
