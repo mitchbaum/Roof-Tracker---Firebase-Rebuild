@@ -79,11 +79,17 @@ extension SummaryController {
             
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "MMddyyyy"
-            let checkDateFormat = dateFormatter.date(from: date + "2022")
+            var checkDateString = ""
             if date != "" {
                 let anotherDateformatter = DateFormatter()
                 anotherDateformatter.dateFormat = "MMM dd, yyyy"
-                let checkDateString = "\(anotherDateformatter.string(from: checkDateFormat!))"
+                if date.count == 4 {
+                    let checkDateFormat = dateFormatter.date(from: date + "2023")
+                    checkDateString = "\(anotherDateformatter.string(from: checkDateFormat!))"
+                } else if date.count == 8 {
+                    let checkDateFormat = dateFormatter.date(from: date)
+                    checkDateString = "\(anotherDateformatter.string(from: checkDateFormat!))"
+                }
                 if checkDateString == "Jan 01, 2000" {
                     checkCell.myCheckDateLabel?.text = " "
                 } else {
