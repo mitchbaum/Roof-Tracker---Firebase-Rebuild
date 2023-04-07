@@ -252,9 +252,10 @@ class CreateCheckController: UIViewController, UIPickerViewDelegate, UIPickerVie
                 myStringDate = dateFormatter.string(from: checkDate)
             } else {
                 let dateFormatter = DateFormatter()
+                let year = Calendar(identifier: .gregorian).dateComponents([.year], from: Date()).year
                 dateFormatter.dateFormat = "MMdd"
                 // check to make sure user enters correct format of birthday or correct date
-
+                
                 guard let checkDate = dateFormatter.date(from: checkText)
                 else {
                     let alertController = UIAlertController(title: "Invalid Date", message: "Double check the format. MMdd or MMddyyyy", preferredStyle: .alert)
@@ -262,7 +263,7 @@ class CreateCheckController: UIViewController, UIPickerViewDelegate, UIPickerVie
                     present(alertController, animated: true, completion: nil)
                     return
                 }
-                myStringDate = dateFormatter.string(from: checkDate) //showError(title: "Missing date", message: "Please enter a valid date.")
+                myStringDate = dateFormatter.string(from: checkDate) + "\(year ?? 2023)"
             }
         }
 
