@@ -10,7 +10,6 @@ import CoreData
 import FirebaseAuth
 import Firebase
 import FirebaseDatabase
-import SwiftUI
 import LBTATools
 import JGProgressHUD
 
@@ -151,8 +150,8 @@ class TeamFileDetailsController: UITableViewController {
         // this handles the out of pocket label
         outOfPocketLabelInfo.text = ""
         if file?.deductible == "" {
-            outOfPocketLabelInfo.text = ""
-            outOfPocketLabel.text = "Enter a deductible to calulate the customer's out of pocket total."
+            outOfPocketLabelInfo.text = " "
+            oopFlagMessage.text = "Enter a deductible to calulate the customer's out of pocket total."
         } else if file?.acvItemTotal == "0.0" || file?.acvItemTotal == "0" {
             let deductible = Double(file?.deductible ?? "")
             let deductibleMessage = currencyFormatter.string(from: NSNumber(value: deductible ?? 0.0))

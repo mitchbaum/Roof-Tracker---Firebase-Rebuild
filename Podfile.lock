@@ -347,7 +347,7 @@ PODS:
   - nanopb/decode (1.30906.0)
   - nanopb/encode (1.30906.0)
   - PromisesObjC (1.2.12)
-  - Updates (1.2.4)
+  - Siren (5.8.1)
 
 DEPENDENCIES:
   - Firebase/Analytics
@@ -361,7 +361,7 @@ DEPENDENCIES:
   - IQKeyboardManagerSwift
   - JGProgressHUD
   - LBTATools
-  - Updates
+  - Siren
 
 SPEC REPOS:
   trunk:
@@ -389,7 +389,7 @@ SPEC REPOS:
     - leveldb-library
     - nanopb
     - PromisesObjC
-    - Updates
+    - Siren
 
 SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
@@ -416,8 +416,8 @@ SPEC CHECKSUMS:
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
-  Updates: 2a35686c1d7c10dcf8bed98a9c194f8d305f7bb6
+  Siren: de768099aff1f1c9acda4247064788a4940b4bf3
 
-PODFILE CHECKSUM: ad0f3fc611616e506f39d848779de4226938a89c
+PODFILE CHECKSUM: c964d249d7353f7ee4a98328ee846e96c252394b
 
 COCOAPODS: 1.11.2

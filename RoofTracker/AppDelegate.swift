@@ -8,6 +8,7 @@
 import UIKit
 import FirebaseCore
 import IQKeyboardManagerSwift
+import Siren
 
 // class that changes the color of the small letters at the very top of the app (time, battery life, wifi, etc) with white. THis class gives us the light content
 class CustomNavigationController: UINavigationController {
@@ -23,6 +24,25 @@ class CustomNavigationController: UINavigationController {
 //        return .lightContent
 //    }
 //}
+private extension AppDelegate {
+    func hyperCriticalRulesExample() {
+            let siren = Siren.shared
+            siren.rulesManager = RulesManager(globalRules: .critical,
+                                              showAlertAfterCurrentVersionHasBeenReleasedForDays: 0)
+
+            siren.wail { results in
+                switch results {
+                case .success(let updateResults):
+                    print("AlertAction ", updateResults.alertAction)
+                    print("Localization ", updateResults.localization)
+                    print("Model ", updateResults.model)
+                    print("UpdateType ", updateResults.updateType)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+        }
+}
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -31,8 +51,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-
-
+        window?.makeKeyAndVisible()
+        // force app update. Change version string to lower than current release on app store to test
+        // docs: https://github.com/ArtSabintsev/Siren/blob/master/Example/Example/AppDelegate.swift
+        hyperCriticalRulesExample()
         FirebaseConfiguration.shared.setLoggerLevel(FirebaseLoggerLevel.min)
         FirebaseApp.configure()
         IQKeyboardManager.shared.enable = true
@@ -84,7 +106,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return true
     }
-
+    
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.

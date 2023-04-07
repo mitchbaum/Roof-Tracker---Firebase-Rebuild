@@ -6,7 +6,7 @@ target 'RoofTracker' do
   use_frameworks!
 
   # Pods for RoofTracker  
-pod 'Updates'
+pod 'Siren'
 pod 'FirebaseAnalytics'
 
 pod 'Firebase/Auth'

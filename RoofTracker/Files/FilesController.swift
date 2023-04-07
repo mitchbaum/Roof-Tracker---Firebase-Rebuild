@@ -9,11 +9,9 @@ import UIKit
 import FirebaseAuth
 import Firebase
 import FirebaseDatabase
-import SwiftUI
 import LBTATools
 import JGProgressHUD
 import CoreData
-import Updates
 
 
 // controller name should reflect what it is presenting
@@ -40,16 +38,6 @@ class FilesController: UITableViewController, UISearchBarDelegate, UISearchResul
         super.viewWillAppear(animated)
         // check for updates
         let identifier = Bundle.main.infoDictionary!["CFBundleIdentifier"] as? String ?? ""
-        Updates.configurationURL = URL(string: "https://itunes.apple.com/lookup?bundleId=\(identifier)")
-        Updates.updatingMode = .automatically
-        Updates.notifying = .always
-        Updates.appStoreId = "1626674643"
-        Updates.checkForUpdates { result in
-            guard case .available(_) = result else { return }
-            let outOfDateController = OutOfDateController()
-            (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.changeRootViewController(outOfDateController)
-            UpdatesUI.promptToUpdate(result, presentingViewController: outOfDateController)
-        }
         // check for internet connection, if there is none show an error
         reachability.whenReachable = { reachability in
             if reachability.connection == .wifi {
