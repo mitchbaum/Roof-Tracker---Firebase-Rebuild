@@ -78,12 +78,12 @@ class TeamFileDetailsController: UITableViewController {
             let cocMessage = currencyFormatter.string(from: NSNumber(value: coc))
             cocTotalLabelInfo.text = cocMessage
             let credit = Double(file?.creditItemTotal ?? "")
-            let cocMinusCredit = coc - (credit ?? 0.0)
-            let invoiceMessage = currencyFormatter.string(from: NSNumber(value: cocMinusCredit))
+            let cashTotal = Double(file?.cashItemTotal ?? "")
+            let cocPlusJobsMinusCredit = coc + (cashTotal ?? 0.0) - (credit ?? 0.0)
+            let invoiceMessage = currencyFormatter.string(from: NSNumber(value: cocPlusJobsMinusCredit))
             invoiceTotalLabelInfo.text = invoiceMessage
             let deductibleMessage = currencyFormatter.string(from: NSNumber(value: deductible))
             deductibleTotalLabelInfo.text = deductibleMessage
-            let cashTotal = Double(file?.cashItemTotal ?? "")
             let pymtsMade = Double(file?.pymtCheckTotal ?? "")
             let whatsDue = coc + (cashTotal ?? 0.00) - (pymtsMade ?? 0.00) - (credit ?? 0.0)
             let whatsDueMessage = currencyFormatter.string(from: NSNumber(value: whatsDue))
@@ -103,8 +103,11 @@ class TeamFileDetailsController: UITableViewController {
             // invoice and coc are the same unless there's credit applied
             invoiceTotalLabelInfo.text = ""
             if file?.coc != "" {
-                let coc = Double(file?.coc ?? "")
-                let invoiceMessage = currencyFormatter.string(from: NSNumber(value: coc ?? 0.00))
+                let coc = Double(file?.coc ?? "") ?? 0.0
+                let credit = Double(file?.creditItemTotal ?? "")
+                let cashTotal = Double(file?.cashItemTotal ?? "")
+                let cocPlusJobsMinusCredit = coc + (cashTotal ?? 0.0) - (credit ?? 0.0)
+                let invoiceMessage = currencyFormatter.string(from: NSNumber(value: cocPlusJobsMinusCredit))
                 invoiceTotalLabelInfo.text = invoiceMessage
             }
             
@@ -118,11 +121,14 @@ class TeamFileDetailsController: UITableViewController {
         } else if Double(file?.coc ?? "") != nil {
             cocTotalLabelInfo.text = ""
             if file?.coc != "" {
-                let coc = Double(file?.coc ?? "")
-                let cocMessage = currencyFormatter.string(from: NSNumber(value: coc ?? 0.00))
+                let coc = Double(file?.coc ?? "") ?? 0.0
+                let cocMessage = currencyFormatter.string(from: NSNumber(value: coc))
                 cocTotalLabelInfo.text = cocMessage
                 // set invoice label
-                let invoiceMessage = currencyFormatter.string(from: NSNumber(value: coc ?? 0.00))
+                let credit = Double(file?.creditItemTotal ?? "")
+                let cashTotal = Double(file?.cashItemTotal ?? "")
+                let cocPlusJobsMinusCredit = coc + (cashTotal ?? 0.0) - (credit ?? 0.0)
+                let invoiceMessage = currencyFormatter.string(from: NSNumber(value: cocPlusJobsMinusCredit))
                 invoiceTotalLabelInfo.text = invoiceMessage
                 deductibleTotalLabelInfo.text = file?.deductible
             }
@@ -186,6 +192,9 @@ class TeamFileDetailsController: UITableViewController {
             creditLabel.textColor = UIColor.lightRed
             invoiceTotalLabel.text = "Invoice Total (COC - Credit)"
         }
+        
+        
+        noteLabelInfo.text = file?.note
         
     }
     
