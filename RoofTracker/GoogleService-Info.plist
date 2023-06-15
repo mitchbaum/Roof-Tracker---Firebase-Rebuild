@@ -3,32 +3,32 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>998937353850-n8m2tg9jk9gcaibllnugtd118aeg4isd.apps.googleusercontent.com</string>
+	<string>800103538894-om7jl93pbk4qn1h48v7gi47g9ej76v60.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.998937353850-n8m2tg9jk9gcaibllnugtd118aeg4isd</string>
+	<string>com.googleusercontent.apps.800103538894-om7jl93pbk4qn1h48v7gi47g9ej76v60</string>
 	<key>API_KEY</key>
-	<string>AIzaSyCK_ZDJQe3TMZl01pPKNuWg-QC8Y159Yd4</string>
+	<string>AIzaSyDENpUAXDfDZ7lD34w_rKNC_wsl0d9tqt8</string>
 	<key>GCM_SENDER_ID</key>
-	<string>998937353850</string>
+	<string>800103538894</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.mitchbaumgartner.RoofTrackerFirebase</string>
+	<string>com.mitchbaumgartner.RoofTrackerFirebaseDev</string>
 	<key>PROJECT_ID</key>
-	<string>rooftracker-fb0cf</string>
+	<string>rooftacker-dev</string>
 	<key>STORAGE_BUCKET</key>
-	<string>rooftracker-fb0cf.appspot.com</string>
+	<string>rooftacker-dev.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_GCM_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:998937353850:ios:fcb9032efc0bcdb560e5c3</string>
+	<string>1:800103538894:ios:d7908d1dbe11e34e86309f</string>
 </dict>
 </plist>

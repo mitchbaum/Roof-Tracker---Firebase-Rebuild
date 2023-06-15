@@ -303,9 +303,9 @@ class FilesController: UITableViewController, UISearchBarDelegate, UISearchResul
         
         //self.rowsToDisplay.sort(by: {$0.timeStamp! > $1.timeStamp!})
         self.rowsToDisplay.sort(by: {longDateFormatter.date(from: $0.timeStamp!) ?? shortDateFormatter.date(from: $0.timeStamp!)! > longDateFormatter.date(from: $1.timeStamp!) ?? shortDateFormatter.date(from: $1.timeStamp!)!})
-        
+
         self.files.sort(by: {longDateFormatter.date(from: $0.timeStamp!) ?? shortDateFormatter.date(from: $0.timeStamp!)! > longDateFormatter.date(from: $1.timeStamp!) ?? shortDateFormatter.date(from: $1.timeStamp!)!})
-        //self.files.sort(by: {$0.timeStamp! > $1.timeStamp!})
+
         tableView.reloadData()
         
     }

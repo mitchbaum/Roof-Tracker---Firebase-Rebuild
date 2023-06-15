@@ -128,6 +128,7 @@
 		809BCF3F283BE42800C326B6 /* ItemsController+UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ItemsController+UITableView.swift"; sourceTree = "<group>"; };
 		809BCF41283BEEA400C326B6 /* ItemInformationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemInformationModel.swift; sourceTree = "<group>"; };
 		809BCF45283D6A2E00C326B6 /* SummaryController+UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SummaryController+UITableView.swift"; sourceTree = "<group>"; };
+		80D07DF32A3BAEB400E74CAA /* RoofTracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RoofTracker.entitlements; sourceTree = "<group>"; };
 		80DCB04425F5CFB30036A290 /* CreateLineItemController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateLineItemController.swift; sourceTree = "<group>"; };
 		80DCB06B25FEC3D00036A290 /* CheckTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckTableViewCell.swift; sourceTree = "<group>"; };
 		80DCB06C25FEC3D00036A290 /* CheckTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CheckTableViewCell.xib; sourceTree = "<group>"; };
@@ -220,6 +221,7 @@
 		800E956B25EAAD4B005FB32C /* RoofTracker */ = {
 			isa = PBXGroup;
 			children = (
+				80D07DF32A3BAEB400E74CAA /* RoofTracker.entitlements */,
 				809BCF332838203F00C326B6 /* Helpers */,
 				809BCF3A2838375100C326B6 /* Settings */,
 				809BCF2E2837058500C326B6 /* Sign In */,
@@ -862,6 +864,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = RoofTracker/RoofTracker.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -872,7 +875,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.3.2;
+				MARKETING_VERSION = 2.3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mitchbaumgartner.RoofTrackerFirebase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -888,6 +891,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = RoofTracker/RoofTracker.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -898,7 +902,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.3.2;
+				MARKETING_VERSION = 2.3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mitchbaumgartner.RoofTrackerFirebase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

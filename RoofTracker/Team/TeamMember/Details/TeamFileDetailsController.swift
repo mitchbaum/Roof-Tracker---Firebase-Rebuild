@@ -48,7 +48,7 @@ class TeamFileDetailsController: UITableViewController {
             tableView.sectionHeaderTopPadding = 0
         }
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(handleDone))
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Sales's Rep: \(teamMember?.name ?? "")", style: .plain, target: self, action: nil)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Sale's Rep: \(teamMember?.name ?? "")", style: .plain, target: self, action: nil)
         navigationItem.leftBarButtonItem?.isEnabled = false
         
         // get the note first before UI is built and before table rows are built.

@@ -13,6 +13,8 @@ import Firebase
 import FirebaseDatabase
 import JGProgressHUD
 import FirebaseStorage
+import MobileCoreServices
+import UniformTypeIdentifiers
 
 
 //custom delegation
@@ -21,7 +23,7 @@ protocol CreateFileControllerDelegate {
     func didEditFile(file: FB_File)
 }
 
-class CreateFileController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class CreateFileController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIDocumentPickerDelegate {
     // establishes link to filesController
     //var filesController: filesController?
     var delegate: CreateFileControllerDelegate?
@@ -31,6 +33,9 @@ class CreateFileController: UIViewController, UIImagePickerControllerDelegate, U
     
     var thisFileId = ""
     var isMissingFunds = false
+    
+    var invoicePdfURL = [URL]()
+    var invoicePdfFileName = ""
     
     // variable keeps track of which file you are trying to edit. variable file with type File
     var file: FB_File? {
@@ -164,6 +169,19 @@ class CreateFileController: UIViewController, UIImagePickerControllerDelegate, U
     }
 
     private func FB_saveFileChanges() {
+        print(invoicePdfURL)
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let storageRef = Storage.storage().reference().child("\(uid)/Invoices/\(invoicePdfFileName).pdf")
+        storageRef.putData(invoicePdfURL.first!.dataRepresentation, metadata: nil) { (metadata, error) in
+            if error != nil {
+                print(error ?? "")
+                return
+            }
+            print(metadata ?? "")
+        }
+        
+        return
+        
         self.hud.textLabel.text = "Saving File"
         self.hud.show(in: self.view, animated: true)
         print("saving file changes in Firebase")
@@ -214,8 +232,7 @@ class CreateFileController: UIViewController, UIImagePickerControllerDelegate, U
             }
         }
         
-        
-        print("down here")
+    
         // reset time stamp
         let timeStamp = "\(DateFormatter.localizedString(from: Date(), dateStyle: .long, timeStyle: .long))"
         self.db.collection("Users").document(uid).collection("Files").document(self.thisFileId).updateData(["timeStamp" : timeStamp, "modified" : FieldValue.serverTimestamp()])
@@ -345,6 +362,7 @@ class CreateFileController: UIViewController, UIImagePickerControllerDelegate, U
                                                                                             "pymtCheckTotal" : "",
                                                                                             "rcvItemTotal" : "",
                                                                                             "note" : note])
+        
         if let stockImage = UIImage(named: "file_photo_empty") {
             self.hud.textLabel.text = "Creating File"
             self.hud.show(in: self.view, animated: true)
@@ -425,6 +443,30 @@ class CreateFileController: UIViewController, UIImagePickerControllerDelegate, U
         }
         // Do something
         print("switch value changed \(value)")
+    }
+    
+    @objc private func handleAttachPdf(sender:UIButton) {
+        print("Attaching pdf document")
+        let types = UTType.types(tag: "pdf",
+                                     tagClass: UTTagClass.filenameExtension,
+                                     conformingTo: nil)
+        let documentPickerController = UIDocumentPickerViewController(
+                forOpeningContentTypes: types)
+        documentPickerController.delegate = self
+        documentPickerController.allowsMultipleSelection = false
+        self.present(documentPickerController, animated: true, completion: nil)
+        
+    }
+    
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        print(urls)
+        print(urls.first)
+        print(urls.first?.deletingPathExtension())
+        print(urls.first?.deletingPathExtension().lastPathComponent) // 2021 Highlights
+        attachPdfButton.setTitle("Replace Invoice PDF", for: .normal)
+        pdfLabel.text = "📎 " + (urls.first?.deletingPathExtension().lastPathComponent ?? "Error attaching document.")
+        invoicePdfURL = urls
+        invoicePdfFileName = urls.first?.deletingPathExtension().lastPathComponent ?? ""
     }
     
     func confirmMissingFunds(_ action: UIAlertAction) {
@@ -700,7 +742,32 @@ class CreateFileController: UIViewController, UIImagePickerControllerDelegate, U
         return sc
     }()
     
-    lazy var contentViewSize = CGSize(width: self.view.frame.width, height: self.view.frame.height +   165)
+    let attachPdfButton: UIButton = {
+        let button = UIButton()
+
+        button.backgroundColor = .lightRed
+        button.setTitle("Attach Invoice PDF", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.layer.cornerRadius = 10
+        button.addTarget(self, action: #selector(handleAttachPdf(sender:)), for: .touchUpInside)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16.0)
+        // enable autolayout
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    let pdfLabel: UILabel = {
+        let label = UILabel()
+        label.text = ""
+        label.font = UIFont.systemFont(ofSize: 13, weight: .medium)
+        label.textColor = .black
+        // enable autolayout
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        return label
+    }()
+    
+    lazy var contentViewSize = CGSize(width: self.view.frame.width, height: self.view.frame.height +   209)
     // add scroll to view controller
     lazy var scrollView : UIScrollView = {
         let view = UIScrollView(frame : .zero)
@@ -829,7 +896,29 @@ class CreateFileController: UIViewController, UIImagePickerControllerDelegate, U
             view.addSubview(missingFundsSwitch)
             missingFundsSwitch.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -32).isActive = true
             missingFundsSwitch.centerYAnchor.constraint(equalTo: missingFundsLabel.centerYAnchor).isActive = true
+            
+            view.addSubview(attachPdfButton)
+            attachPdfButton.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -16).isActive = true
+            attachPdfButton.topAnchor.constraint(equalTo: missingFundsSwitch.bottomAnchor, constant: 30).isActive = true
+            attachPdfButton.heightAnchor.constraint(equalToConstant: 34).isActive = true
+            attachPdfButton.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 16).isActive = true
+            
+            view.addSubview(pdfLabel)
+            pdfLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
+            pdfLabel.topAnchor.constraint(equalTo: attachPdfButton.bottomAnchor, constant: 10).isActive = true
+            
+        } else {
+            view.addSubview(attachPdfButton)
+            attachPdfButton.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -16).isActive = true
+            attachPdfButton.topAnchor.constraint(equalTo: finalCOCSwitch.bottomAnchor, constant: 30).isActive = true
+            attachPdfButton.heightAnchor.constraint(equalToConstant: 34).isActive = true
+            attachPdfButton.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 16).isActive = true
+            
+            view.addSubview(pdfLabel)
+            pdfLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
+            pdfLabel.topAnchor.constraint(equalTo: attachPdfButton.bottomAnchor, constant: 10).isActive = true
         }
+        
 
 
 
